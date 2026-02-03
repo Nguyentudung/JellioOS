@@ -1,94 +1,137 @@
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
-
 @import "tailwindcss";
+@plugin "tailwindcss-animate";
 
 @theme {
     /* Fonts */
     --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
-    /* Semantic Colors */
-    --color-bg-app: var(--bg-app);
-    --color-bg-surface: var(--bg-surface);
-    --color-border-app: var(--border-app);
-    --color-text-primary: var(--text-primary);
-    --color-text-secondary: var(--text-secondary);
-    --color-accent: var(--color-accent);
-    --color-accent-hover: var(--color-accent-hover);
+    /* Semantic Color Mapping */
+    --color-background: hsl(var(--background));
+    --color-foreground: hsl(var(--foreground));
 
-    /* Shadow Removal Override - enforcing strict flat design */
-    --shadow-none: 0 0 #0000;
-    --shadow-sm: 0 0 #0000;
-    --shadow-md: 0 0 #0000;
-    --shadow-lg: 0 0 #0000;
-    --shadow-xl: 0 0 #0000;
-    --shadow-2xl: 0 0 #0000;
+    --color-card: hsl(var(--card));
+    --color-card-foreground: hsl(var(--card-foreground));
 
-    /* Animations */
-    --animate-fade-in: fadeIn 0.3s ease-out;
+    --color-popover: hsl(var(--popover));
+    --color-popover-foreground: hsl(var(--popover-foreground));
 
-    @keyframes fadeIn {
-        0% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 1;
-        }
-    }
-}
+    --color-primary: hsl(var(--primary));
+    --color-primary-foreground: hsl(var(--primary-foreground));
 
-:root {
-    font-family: var(--font-sans);
-    line-height: 1.5;
-    font-weight: 400;
+    --color-secondary: hsl(var(--secondary));
+    --color-secondary-foreground: hsl(var(--secondary-foreground));
 
-    /* Light Mode Palette */
-    --bg-app: #ffffff;
-    --bg-surface: #f9fafb;
-    --border-app: #e5e7eb;
-    --text-primary: #111827;
-    --text-secondary: #6b7280;
+    --color-muted: hsl(var(--muted));
+    --color-muted-foreground: hsl(var(--muted-foreground));
 
-    /* Accent - Jellio Blue */
-    --color-accent: #2f81f7;
+    --color-accent: hsl(var(--accent));
+    --color-accent-foreground: hsl(var(--accent-foreground));
+
+    --color-destructive: hsl(var(--destructive));
+    --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+    --color-border: hsl(var(--border));
+    --color-input: hsl(var(--input));
+    --color-ring: hsl(var(--ring));
+
+    --radius: 0.75rem;
+
+    /* Legacy JellioOS Variables Adapter (for existing components) */
+    --color-bg-app: hsl(var(--background));
+    --color-bg-surface: hsl(var(--card));
+    --color-border-app: hsl(var(--border));
+    --color-text-primary: hsl(var(--foreground));
+    --color-text-secondary: hsl(var(--muted-foreground));
     --color-accent-hover: #1c6cdb;
 
-    color-scheme: light;
-    background-color: var(--bg-app);
-    color: var(--text-primary);
+    /* Strict Flat Overrides */
+    --shadow-sm: 0 0 transparent;
+    --shadow: 0 0 transparent;
+    --shadow-md: 0 0 transparent;
+    --shadow-lg: 0 0 transparent;
+    --shadow-xl: 0 0 transparent;
+    --shadow-2xl: 0 0 transparent;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        /* Dark Mode Palette - Strict Flat */
-        --bg-app: #0a0a0a; /* Deep Black */
-        --bg-surface: #171717; /* Slightly lighter for separation */
-        --border-app: #262626; /* Dark Gray Border */
-        --text-primary: #ededed;
-        --text-secondary: #a1a1aa;
+/* Base Shadcn Variables */
+:root {
+    --background: 0 0% 100%; /* #ffffff */
+    --foreground: 0 0% 3.9%; /* #0a0a0a (slate-950 equivalent) */
 
-        color-scheme: dark;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+
+    --primary: 217 91% 60%; /* #2b7fff (Jellio Blue) */
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.75rem;
+}
+
+/* Dark Mode Shadcn Variables */
+.dark {
+    --background: 0 0% 3.9%; /* #0a0a0a */
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 217 91% 60%;
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        margin: 0;
+        min-width: 320px;
+        min-height: 100vh;
+        @apply bg-bg-app text-text-primary antialiased;
+        overflow-x: hidden;
     }
 }
 
-/* Manual Toggle Support */
-.dark {
-    --bg-app: #0a0a0a;
-    --bg-surface: #171717;
-    --border-app: #262626;
-    --text-primary: #ededed;
-    --text-secondary: #a1a1aa;
-
-    color-scheme: dark;
-}
-
-body {
-    margin: 0;
-    min-width: 320px;
-    min-height: 100vh;
-    @apply bg-bg-app text-text-primary antialiased;
-}
-
-/* Scrollbar styling */
+/* Existing Scrollbar Styling */
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -97,14 +140,9 @@ body {
     background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    background: var(--border-app);
+    background: hsl(var(--border));
     border-radius: 99px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--text-secondary);
-}
-
-/* Global Reset for Borders */
-* {
-    border-color: var(--border-app);
+    background: hsl(var(--muted-foreground));
 }
