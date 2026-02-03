@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Undo, Redo, Shuffle, Download, Sun, Moon } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Undo, Redo, Shuffle, Download, ArrowLeft } from "lucide-react";
 import { Button } from "../ui/Button";
 import { Slider } from "../ui/Slider";
 
@@ -8,8 +9,6 @@ interface HeaderProps {
     onRedo: () => void;
     onRandomize: () => void;
     onExport: (ext: "png" | "svg", size: number) => void;
-    theme: "light" | "dark";
-    toggleTheme: () => void;
     canUndo: boolean;
     canRedo: boolean;
 }
@@ -19,8 +18,6 @@ export function Header({
     onRedo,
     onRandomize,
     onExport,
-    theme,
-    toggleTheme,
     canUndo,
     canRedo,
 }: HeaderProps) {
@@ -48,7 +45,7 @@ export function Header({
     };
 
     return (
-        <div className="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur flex items-center justify-between px-6 z-20">
+        <div className="h-16 border-b border-border-app bg-bg-app/80 backdrop-blur flex items-center justify-between px-6 z-20">
             <div className="flex items-center gap-2">
                 <Button
                     variant="outline"
@@ -68,9 +65,9 @@ export function Header({
                 >
                     <Redo className="w-4 h-4" />
                 </Button>
-                <div className="w-px h-6 bg-slate-300 dark:bg-slate-700 mx-1"></div>
+                <div className="w-px h-6 bg-border-app mx-1"></div>
                 <Button
-                    className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+                    className="bg-bg-surface border border-border-app text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20"
                     size="sm"
                     onClick={onRandomize}
                 >
@@ -80,13 +77,16 @@ export function Header({
             </div>
 
             <div className="flex items-center gap-3">
-                <Button variant="ghost" size="icon" onClick={toggleTheme}>
-                    {theme === "dark" ? (
-                        <Sun className="w-4 h-4" />
-                    ) : (
-                        <Moon className="w-4 h-4" />
-                    )}
-                </Button>
+                <Link to="/">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-text-secondary hover:text-text-primary gap-2"
+                    >
+                        <ArrowLeft className="w-4 h-4" />
+                        <span className="hidden sm:inline">Thoát</span>
+                    </Button>
+                </Link>
 
                 <div className="relative" ref={exportRef}>
                     <Button
@@ -99,14 +99,14 @@ export function Header({
                     </Button>
 
                     {showExport && (
-                        <div className="absolute top-[calc(100%+10px)] right-0 w-[280px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl p-4 z-50 animate-fade-in-up">
+                        <div className="absolute top-[calc(100%+10px)] right-0 w-[280px] bg-bg-surface border border-border-app rounded-lg shadow-none p-4 z-50 animate-fade-in-up">
                             <div className="space-y-4">
                                 <div>
                                     <div className="flex justify-between items-center mb-2">
-                                        <span className="text-xs font-bold text-slate-500 uppercase">
+                                        <span className="text-xs font-bold text-text-secondary uppercase">
                                             Kích thước
                                         </span>
-                                        <span className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">
+                                        <span className="text-xs font-mono font-bold text-accent">
                                             {exportSize}px
                                         </span>
                                     </div>
@@ -123,23 +123,23 @@ export function Header({
                                     />
                                 </div>
                                 <div>
-                                    <span className="text-xs font-bold text-slate-500 uppercase mb-2 block">
+                                    <span className="text-xs font-bold text-text-secondary uppercase mb-2 block">
                                         Định dạng
                                     </span>
                                     <div className="grid grid-cols-2 gap-3">
                                         <button
                                             onClick={() => handleExport("png")}
-                                            className="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all group"
+                                            className="flex flex-col items-center justify-center p-3 rounded-md border border-border-app bg-bg-app hover:border-accent hover:bg-accent/5 transition-all group"
                                         >
-                                            <span className="text-xs font-black text-slate-700 dark:text-slate-200 group-hover:text-blue-600">
+                                            <span className="text-xs font-black text-text-primary group-hover:text-accent">
                                                 PNG
                                             </span>
                                         </button>
                                         <button
                                             onClick={() => handleExport("svg")}
-                                            className="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all group"
+                                            className="flex flex-col items-center justify-center p-3 rounded-md border border-border-app bg-bg-app hover:border-accent hover:bg-accent/5 transition-all group"
                                         >
-                                            <span className="text-xs font-black text-slate-700 dark:text-slate-200 group-hover:text-blue-600">
+                                            <span className="text-xs font-black text-text-primary group-hover:text-accent">
                                                 SVG
                                             </span>
                                         </button>

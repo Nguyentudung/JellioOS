@@ -3,47 +3,35 @@
 @import "tailwindcss";
 
 @theme {
+    /* Fonts */
     --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
-    /* Primary Colors */
-    --color-primary: #0a0c10;
-    --color-secondary: #161b22;
-    --color-accent: #2f81f7;
-    --color-accent-hover: #58a6ff;
+    /* Semantic Colors */
+    --color-bg-app: var(--bg-app);
+    --color-bg-surface: var(--bg-surface);
+    --color-border-app: var(--border-app);
+    --color-text-primary: var(--text-primary);
+    --color-text-secondary: var(--text-secondary);
+    --color-accent: var(--color-accent);
+    --color-accent-hover: var(--color-accent-hover);
 
-    /* Text Colors */
-    --color-text-main: #f0f6fc;
-    --color-text-muted: #8b949e;
-
-    /* Utility Colors */
-    --color-dark-800: var(--color-secondary);
-    --color-dark-900: var(--color-primary);
-    --color-dark-950: #020617;
+    /* Shadow Removal Override - enforcing strict flat design */
+    --shadow-none: 0 0 #0000;
+    --shadow-sm: 0 0 #0000;
+    --shadow-md: 0 0 #0000;
+    --shadow-lg: 0 0 #0000;
+    --shadow-xl: 0 0 #0000;
+    --shadow-2xl: 0 0 #0000;
 
     /* Animations */
-    --animate-pop: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    --animate-fade-in-up: fadeInUp 0.4s ease-out;
+    --animate-fade-in: fadeIn 0.3s ease-out;
 
-    @keyframes pop {
-        0% {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.05);
-        }
-        100% {
-            transform: scale(1);
-        }
-    }
-
-    @keyframes fadeInUp {
+    @keyframes fadeIn {
         0% {
             opacity: 0;
-            transform: translateY(20px);
         }
         100% {
             opacity: 1;
-            transform: translateY(0);
         }
     }
 }
@@ -53,47 +41,70 @@
     line-height: 1.5;
     font-weight: 400;
 
-    color-scheme: dark;
-    background-color: var(--color-primary);
-    color: var(--color-text-main);
+    /* Light Mode Palette */
+    --bg-app: #ffffff;
+    --bg-surface: #f9fafb;
+    --border-app: #e5e7eb;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
 
-    /* Selection Color */
-    --color-selection: rgba(47, 129, 247, 0.3);
+    /* Accent - Jellio Blue */
+    --color-accent: #2f81f7;
+    --color-accent-hover: #1c6cdb;
+
+    color-scheme: light;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
 }
 
-::selection {
-    background: var(--color-selection);
-    color: #fff;
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Dark Mode Palette - Strict Flat */
+        --bg-app: #0a0a0a; /* Deep Black */
+        --bg-surface: #171717; /* Slightly lighter for separation */
+        --border-app: #262626; /* Dark Gray Border */
+        --text-primary: #ededed;
+        --text-secondary: #a1a1aa;
+
+        color-scheme: dark;
+    }
+}
+
+/* Manual Toggle Support */
+.dark {
+    --bg-app: #0a0a0a;
+    --bg-surface: #171717;
+    --border-app: #262626;
+    --text-primary: #ededed;
+    --text-secondary: #a1a1aa;
+
+    color-scheme: dark;
 }
 
 body {
     margin: 0;
     min-width: 320px;
     min-height: 100vh;
-    @apply bg-primary text-text-main antialiased;
+    @apply bg-bg-app text-text-primary antialiased;
 }
 
-/* Custom Scrollbar specifically for dark theme dominance */
+/* Scrollbar styling */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
 }
 ::-webkit-scrollbar-track {
-    background: var(--color-primary);
+    background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    background: #30363d;
-    border-radius: 4px;
+    background: var(--border-app);
+    border-radius: 99px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #424a53;
+    background: var(--text-secondary);
 }
 
-/* Subtle Grid Background for dashboard vibes */
-.bg-grid-premium {
-    background-size: 40px 40px;
-    background-image:
-        linear-gradient(to right, #161b22 1px, transparent 1px),
-        linear-gradient(to bottom, #161b22 1px, transparent 1px);
-    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+/* Global Reset for Borders */
+* {
+    border-color: var(--border-app);
 }

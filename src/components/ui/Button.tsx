@@ -11,7 +11,6 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: "primary" | "secondary" | "outline" | "ghost" | "danger" | "text";
     size?: "sm" | "md" | "lg" | "icon";
     isLoading?: boolean;
-    scaleOnHover?: boolean;
 }
 
 type MotionButtonProps = React.ComponentProps<typeof motion.button> &
@@ -25,40 +24,39 @@ export const Button = React.forwardRef<HTMLButtonElement, MotionButtonProps>(
             size = "md",
             isLoading,
             children,
-            scaleOnHover = true,
             ...props
         },
         ref,
     ) => {
         const variants = {
             primary:
-                "bg-accent hover:bg-accent-hover text-white shadow-lg shadow-accent/20 border border-transparent",
+                "bg-accent hover:bg-accent-hover text-white border border-transparent",
             secondary:
-                "bg-secondary hover:bg-[#1f2937] text-text-main border border-[#30363d]",
+                "bg-bg-surface hover:bg-bg-app text-text-primary border border-border-app hover:border-accent transition-colors",
             outline:
-                "bg-transparent border border-[#30363d] text-text-muted hover:text-text-main hover:border-text-muted hover:bg-secondary/50",
-            ghost: "bg-transparent text-text-muted hover:text-text-main hover:bg-secondary/50",
+                "bg-transparent border border-border-app text-text-secondary hover:text-text-primary hover:border-text-primary hover:bg-bg-surface",
+            ghost: "bg-transparent text-text-secondary hover:text-text-primary hover:bg-bg-surface",
             danger: "bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20",
             text: "p-0 text-accent hover:text-accent-hover underline-offset-4 hover:underline",
         };
 
         const sizes = {
-            sm: "h-8 px-3 text-xs rounded-lg",
-            md: "h-10 px-5 text-sm rounded-lg",
-            lg: "h-12 px-8 text-base rounded-xl",
-            icon: "h-10 w-10 flex items-center justify-center rounded-lg p-0",
+            sm: "h-8 px-3 text-xs rounded-md", // Changed to rounded-md
+            md: "h-10 px-5 text-sm rounded-md", // Changed to rounded-md
+            lg: "h-12 px-8 text-base rounded-lg",
+            icon: "h-10 w-10 flex items-center justify-center rounded-md p-0",
         };
 
         return (
             <motion.button
                 ref={ref}
-                whileTap={{ scale: 0.95 }}
-                whileHover={scaleOnHover ? { scale: 1.02, opacity: 0.95 } : {}}
+                whileTap={{ scale: 0.98 }}
                 className={cn(
-                    "relative inline-flex items-center justify-center font-semibold transition-colors duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-accent/50 disabled:opacity-50 disabled:pointer-events-none cursor-pointer tracking-wide",
+                    "relative inline-flex items-center justify-center font-semibold transition-colors duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-1 focus:ring-offset-bg-app disabled:opacity-50 disabled:pointer-events-none cursor-pointer tracking-wide",
                     variants[variant],
                     variant !== "text" ? sizes[size] : "",
                     className,
+                    "shadow-none", // Enforce no shadow
                 )}
                 {...props}
             >

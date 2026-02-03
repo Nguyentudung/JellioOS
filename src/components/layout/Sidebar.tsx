@@ -5,7 +5,6 @@ import { Select } from "../ui/Select";
 import { Slider } from "../ui/Slider";
 import { ColorPicker } from "../ui/ColorPicker";
 import { X } from "lucide-react";
-import JellioLogo from "../../assets/logo/Jellio.png";
 
 interface SidebarProps {
     state: QRState;
@@ -39,23 +38,13 @@ export function Sidebar({ state, onChange }: SidebarProps) {
     };
 
     return (
-        <aside className="w-full md:w-[400px] bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col z-30 shadow-xl h-full shrink-0">
-            <header className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <img
-                        src={JellioLogo}
-                        alt="Jellio"
-                        className="w-8 h-8 object-contain rounded-lg"
-                        onError={(e) =>
-                            (e.currentTarget.src =
-                                "https://cdn-icons-png.flaticon.com/512/714/714390.png")
-                        }
-                    />
-                    <h1 className="text-xl font-extrabold tracking-tight">
-                        jellio<span className="text-blue-500 italic">OS</span>
-                    </h1>
-                </div>
-            </header>
+        <aside className="w-full md:w-[400px] bg-bg-surface border-r border-border-app flex flex-col z-30 shadow-none h-full shrink-0">
+            {/* Minimal Header / Title for the Tool Panel */}
+            <div className="p-4 border-b border-border-app">
+                <h2 className="text-sm font-bold text-text-primary uppercase tracking-wider">
+                    Cấu hình QR
+                </h2>
+            </div>
 
             <div className="flex-1 overflow-y-auto p-4 space-y-6">
                 {/* Content */}
@@ -63,7 +52,7 @@ export function Sidebar({ state, onChange }: SidebarProps) {
                     <Label>Nội dung QR</Label>
                     <input
                         type="text"
-                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:border-blue-500 outline-none transition-all dark:text-white"
+                        className="w-full bg-bg-app border border-border-app rounded-md px-3 py-2.5 text-sm font-medium text-text-primary focus:border-accent outline-none transition-all placeholder:text-text-secondary"
                         placeholder="Nhập link..."
                         value={state.data}
                         onChange={(e) => onChange({ data: e.target.value })}
@@ -93,12 +82,12 @@ export function Sidebar({ state, onChange }: SidebarProps) {
                             />
                         </div>
 
-                        <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                        <div className="pt-2 border-t border-border-app">
                             <div className="flex justify-between items-center mb-1">
-                                <span className="text-[10px] font-bold text-slate-500 uppercase">
+                                <span className="text-[10px] font-bold text-text-secondary uppercase">
                                     Khoảng cách lề (Margin)
                                 </span>
-                                <span className="text-[10px] font-mono text-blue-500 font-bold">
+                                <span className="text-[10px] font-mono text-accent font-bold">
                                     {state.margin}px
                                 </span>
                             </div>
@@ -121,16 +110,16 @@ export function Sidebar({ state, onChange }: SidebarProps) {
                 <div className="space-y-3">
                     <div className="flex justify-between items-center">
                         <Label className="mb-0">Màu sắc</Label>
-                        <div className="flex bg-slate-100 dark:bg-slate-800 rounded p-0.5">
+                        <div className="flex bg-bg-app border border-border-app rounded p-0.5">
                             <button
                                 onClick={() => onChange({ isGradient: false })}
-                                className={`px-2 py-1 text-[10px] font-bold rounded transition-all ${!state.isGradient ? "bg-white dark:bg-slate-600 shadow-sm text-black dark:text-white" : "text-slate-400"}`}
+                                className={`px-2 py-1 text-[10px] font-bold rounded transition-all ${!state.isGradient ? "bg-bg-surface border border-border-app text-text-primary" : "text-text-secondary"}`}
                             >
                                 Đơn
                             </button>
                             <button
                                 onClick={() => onChange({ isGradient: true })}
-                                className={`px-2 py-1 text-[10px] font-bold rounded transition-all ${state.isGradient ? "bg-white dark:bg-slate-600 shadow-sm text-black dark:text-white" : "text-slate-400"}`}
+                                className={`px-2 py-1 text-[10px] font-bold rounded transition-all ${state.isGradient ? "bg-bg-surface border border-border-app text-text-primary" : "text-text-secondary"}`}
                             >
                                 Grad
                             </button>
@@ -149,7 +138,7 @@ export function Sidebar({ state, onChange }: SidebarProps) {
                         />
                     </div>
                     <div>
-                        <span className="text-[10px] text-slate-400 mb-1 block">
+                        <span className="text-[10px] text-text-secondary mb-1 block">
                             Màu nền
                         </span>
                         <ColorPicker
@@ -163,7 +152,7 @@ export function Sidebar({ state, onChange }: SidebarProps) {
                 <div className="space-y-2">
                     <Label>Logo Trung Tâm</Label>
                     <div className="flex gap-2 mb-3">
-                        <label className="flex-1 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl h-10 flex items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-medium text-slate-500 transition-colors">
+                        <label className="flex-1 border border-dashed border-border-app rounded-lg h-10 flex items-center justify-center cursor-pointer hover:bg-bg-app text-xs font-medium text-text-secondary transition-colors">
                             {state.logo ? "Thay đổi Logo" : "Tải Logo Lên"}
                             <input
                                 type="file"
@@ -175,7 +164,7 @@ export function Sidebar({ state, onChange }: SidebarProps) {
                         {state.logo && (
                             <button
                                 onClick={() => onChange({ logo: null })}
-                                className="w-10 h-10 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-100 transition-colors"
+                                className="w-10 h-10 flex items-center justify-center bg-red-500/10 text-red-500 rounded-lg border border-red-500/20 hover:bg-red-500/20 transition-colors"
                             >
                                 <X size={16} />
                             </button>
@@ -186,10 +175,10 @@ export function Sidebar({ state, onChange }: SidebarProps) {
                         className={`transition-opacity duration-200 ${!state.logo ? "opacity-50 pointer-events-none" : ""}`}
                     >
                         <div className="flex justify-between items-center mb-1">
-                            <span className="text-[10px] font-bold text-slate-500 uppercase">
+                            <span className="text-[10px] font-bold text-text-secondary uppercase">
                                 Khoảng cách Logo
                             </span>
-                            <span className="text-[10px] font-mono text-blue-500 font-bold">
+                            <span className="text-[10px] font-mono text-accent font-bold">
                                 {state.logoMargin}px
                             </span>
                         </div>
@@ -208,7 +197,7 @@ export function Sidebar({ state, onChange }: SidebarProps) {
                 </div>
             </div>
 
-            <div className="p-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-[10px] text-center text-slate-400 font-bold tracking-widest">
+            <div className="p-3 border-t border-border-app bg-bg-app text-[10px] text-center text-text-secondary font-bold tracking-widest">
                 jellioOS Studio v5.2
             </div>
         </aside>

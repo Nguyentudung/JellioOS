@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { QrCode, ArrowRight, Zap, Code2, Box, Cpu } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import { JellioLogo } from "../../components/ui/Logo";
+import { Navbar } from "../../components/navigation/Navbar";
 
 export default function HomePage() {
     const container: Variants = {
@@ -46,7 +47,8 @@ export default function HomePage() {
                 />
             </Helmet>
 
-            <div className="min-h-screen bg-primary font-sans text-text-main selection:bg-accent/30 selection:text-white overflow-x-hidden">
+            <div className="min-h-screen bg-bg-app font-sans text-text-primary selection:bg-accent/30 selection:text-white overflow-x-hidden">
+                <Navbar />
                 {/* Background Grid */}
                 <div className="fixed inset-0 bg-grid-premium opacity-40 pointer-events-none" />
 
@@ -59,10 +61,8 @@ export default function HomePage() {
                             transition={{ duration: 0.8 }}
                             className="relative"
                         >
-                            {/* Glow Effect */}
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-accent/30 rounded-full blur-[50px] animate-pulse" />
                             <JellioLogo
-                                className="w-24 h-24 mb-6 relative z-10 drop-shadow-2xl"
+                                className="w-24 h-24 mb-6 relative z-10"
                                 animated={true}
                             />
                         </motion.div>
@@ -79,7 +79,7 @@ export default function HomePage() {
                                     Điểm ảnh & Dòng code
                                 </span>
                             </h1>
-                            <p className="text-xl md:text-2xl text-text-muted font-medium leading-relaxed max-w-2xl mx-auto">
+                            <p className="text-xl md:text-2xl text-text-secondary font-medium leading-relaxed max-w-2xl mx-auto">
                                 Hệ sinh thái công cụ web mã nguồn mở.{" "}
                                 <br className="hidden md:block" /> Đơn giản,
                                 mạnh mẽ và tôn trọng quyền riêng tư của bạn.
@@ -95,14 +95,14 @@ export default function HomePage() {
                             <Link to="/tools/qr">
                                 <Button
                                     size="lg"
-                                    className="w-full sm:w-48 shadow-xl shadow-accent/10"
+                                    className="w-full sm:w-48 shadow-none"
                                 >
                                     <Zap className="w-5 h-5 mr-2 fill-current" />{" "}
                                     Trải nghiệm Ngay
                                 </Button>
                             </Link>
                             <a
-                                href="https://github.com/jellioos"
+                                href="https://github.com/Nguyentudung/JellioOS"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
@@ -125,7 +125,7 @@ export default function HomePage() {
                                 <h2 className="text-3xl font-bold mb-2">
                                     Trung tâm Công cụ
                                 </h2>
-                                <p className="text-text-muted">
+                                <p className="text-text-secondary">
                                     Lựa chọn công cụ bạn cần để bắt đầu.
                                 </p>
                             </div>
@@ -133,7 +133,7 @@ export default function HomePage() {
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="text-text-muted"
+                                    className="text-text-secondary"
                                 >
                                     Xem tất cả{" "}
                                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -151,20 +151,20 @@ export default function HomePage() {
                             {/* Active Tool */}
                             <motion.div
                                 variants={item}
-                                className="group flex flex-col h-full bg-secondary border border-[#30363d] rounded-2xl p-6 hover:border-accent/40 hover:shadow-2xl hover:shadow-accent/5 transition-all duration-300"
+                                className="group flex flex-col h-full bg-bg-surface border border-border-app rounded-2xl p-6 hover:border-accent transition-all duration-300"
                             >
                                 <div className="flex justify-between items-start mb-6">
-                                    <div className="p-3 bg-primary rounded-xl border border-[#30363d] group-hover:border-accent/30 transition-colors">
+                                    <div className="p-3 bg-bg-app rounded-xl border border-border-app group-hover:border-accent/30 transition-colors">
                                         <QrCode className="w-8 h-8 text-accent" />
                                     </div>
                                     <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent rounded-full border border-accent/20">
                                         Available
                                     </span>
                                 </div>
-                                <h3 className="text-xl font-bold mb-2 text-text-main group-hover:text-accent transition-colors">
+                                <h3 className="text-xl font-bold mb-2 text-text-primary group-hover:text-accent transition-colors">
                                     QR Studio
                                 </h3>
-                                <p className="text-text-muted text-sm flex-1 mb-6">
+                                <p className="text-text-secondary text-sm flex-1 mb-6">
                                     Trình tạo mã QR cao cấp. Hỗ trợ tùy chỉnh
                                     logo, màu sắc gradient và định dạng vector
                                     (SVG).
@@ -183,27 +183,27 @@ export default function HomePage() {
                             {/* Upcoming Tool 1 */}
                             <motion.div
                                 variants={item}
-                                className="opacity-60 flex flex-col h-full bg-secondary/30 border border-[#30363d] border-dashed rounded-2xl p-6"
+                                className="opacity-60 flex flex-col h-full bg-bg-surface/30 border border-border-app border-dashed rounded-2xl p-6"
                             >
                                 <div className="flex justify-between items-start mb-6">
-                                    <div className="p-3 bg-primary/50 rounded-xl border border-[#30363d]">
-                                        <Box className="w-8 h-8 text-text-muted" />
+                                    <div className="p-3 bg-bg-app/50 rounded-xl border border-border-app">
+                                        <Box className="w-8 h-8 text-text-secondary" />
                                     </div>
-                                    <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-[#30363d] text-text-muted rounded-full">
+                                    <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-bg-surface text-text-secondary rounded-full border border-border-app">
                                         Coming Soon
                                     </span>
                                 </div>
-                                <h3 className="text-xl font-bold mb-2 text-text-muted">
+                                <h3 className="text-xl font-bold mb-2 text-text-secondary">
                                     Smart Converter
                                 </h3>
-                                <p className="text-text-muted text-sm flex-1 mb-6">
+                                <p className="text-text-secondary text-sm flex-1 mb-6">
                                     Chuyển đổi đa định dạng file (PDF, IMG,
                                     JSON) nhanh chóng ngay trên trình duyệt.
                                 </p>
                                 <Button
                                     disabled
                                     variant="ghost"
-                                    className="w-full border border-[#30363d]"
+                                    className="w-full border border-border-app"
                                 >
                                     Đang phát triển...
                                 </Button>
@@ -212,27 +212,27 @@ export default function HomePage() {
                             {/* Upcoming Tool 2 */}
                             <motion.div
                                 variants={item}
-                                className="opacity-60 flex flex-col h-full bg-secondary/30 border border-[#30363d] border-dashed rounded-2xl p-6"
+                                className="opacity-60 flex flex-col h-full bg-bg-surface/30 border border-border-app border-dashed rounded-2xl p-6"
                             >
                                 <div className="flex justify-between items-start mb-6">
-                                    <div className="p-3 bg-primary/50 rounded-xl border border-[#30363d]">
-                                        <Cpu className="w-8 h-8 text-text-muted" />
+                                    <div className="p-3 bg-bg-app/50 rounded-xl border border-border-app">
+                                        <Cpu className="w-8 h-8 text-text-secondary" />
                                     </div>
-                                    <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-[#30363d] text-text-muted rounded-full">
+                                    <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-bg-surface text-text-secondary rounded-full border border-border-app">
                                         Concept
                                     </span>
                                 </div>
-                                <h3 className="text-xl font-bold mb-2 text-text-muted">
+                                <h3 className="text-xl font-bold mb-2 text-text-secondary">
                                     Dev Utils
                                 </h3>
-                                <p className="text-text-muted text-sm flex-1 mb-6">
+                                <p className="text-text-secondary text-sm flex-1 mb-6">
                                     Bộ công cụ tiện ích cho Developer: JSON
                                     Formatter, Base64 encoder, RegEx tester.
                                 </p>
                                 <Button
                                     disabled
                                     variant="ghost"
-                                    className="w-full border border-[#30363d]"
+                                    className="w-full border border-border-app"
                                 >
                                     Đang phát triển...
                                 </Button>
@@ -241,22 +241,22 @@ export default function HomePage() {
                     </section>
 
                     {/* Footer */}
-                    <footer className="mt-32 pt-12 border-t border-[#30363d] text-center md:text-left">
+                    <footer className="mt-32 pt-12 border-t border-border-app text-center md:text-left">
                         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                             <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 bg-white text-black rounded-lg flex items-center justify-center font-bold font-mono">
+                                <div className="w-8 h-8 bg-text-primary text-bg-app rounded-lg flex items-center justify-center font-bold font-mono">
                                     J
                                 </div>
                                 <div>
                                     <p className="font-bold text-lg">
                                         jellioOS{" "}
-                                        <span className="text-xs font-normal text-text-muted px-2 py-0.5 bg-[#30363d] rounded ml-2">
+                                        <span className="text-xs font-normal text-text-secondary px-2 py-0.5 bg-bg-surface border border-border-app rounded ml-2">
                                             v5.3-alpha
                                         </span>
                                     </p>
                                 </div>
                             </div>
-                            <div className="flex gap-8 text-sm text-text-muted">
+                            <div className="flex gap-8 text-sm text-text-secondary">
                                 <a
                                     href="#"
                                     className="hover:text-accent transition-colors"
@@ -277,7 +277,7 @@ export default function HomePage() {
                                 </a>
                             </div>
                         </div>
-                        <div className="mt-8 pt-8 border-t border-[#30363d]/50 text-xs text-[#8b949e]">
+                        <div className="mt-8 pt-8 border-t border-border-app text-xs text-text-secondary">
                             <p>
                                 © 2026 JellioOS Project. Mã nguồn mở theo giấy
                                 phép MIT.

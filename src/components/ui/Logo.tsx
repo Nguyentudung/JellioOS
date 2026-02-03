@@ -35,9 +35,9 @@ export function JellioLogo({
 
 export function LogoText() {
     return (
-        <span className="font-sans text-xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-0.5">
+        <span className="font-sans text-xl font-bold tracking-tight text-text-primary flex items-center gap-0.5">
             jellio
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-500 dark:from-blue-400 dark:to-indigo-400 italic">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-500 to-indigo-500 italic">
                 OS
             </span>
         </span>

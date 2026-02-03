@@ -4,7 +4,7 @@
  */
 
 import { Link } from "react-router-dom";
-import { Menu, X, Github, ChevronDown } from "lucide-react";
+import { Menu, X, Github, ChevronDown, Sun, Moon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "../../lib/utils";
 import { Button } from "../ui/Button";
@@ -23,20 +23,41 @@ const tools = [
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    // const location = useLocation();
+    const [theme, setTheme] = useState<"light" | "dark">("light");
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
         window.addEventListener("scroll", handleScroll);
+
+        // Theme initialization
+        const savedTheme = localStorage.getItem("theme") as "light" | "dark";
+        if (savedTheme) {
+            setTheme(savedTheme);
+            document.documentElement.classList.toggle(
+                "dark",
+                savedTheme === "dark",
+            );
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            setTheme("dark");
+            document.documentElement.classList.add("dark");
+        }
+
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    const toggleTheme = () => {
+        const newTheme = theme === "light" ? "dark" : "light";
+        setTheme(newTheme);
+        localStorage.setItem("theme", newTheme);
+        document.documentElement.classList.toggle("dark", newTheme === "dark");
+    };
 
     return (
         <nav
             className={cn(
                 "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
                 scrolled
-                    ? "bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-slate-200 dark:border-slate-800 py-2 shadow-sm"
+                    ? "bg-bg-app/90 backdrop-blur-md border-border-app py-2 shadow-none"
                     : "bg-transparent border-transparent py-4",
             )}
         >
@@ -44,7 +65,7 @@ export function Navbar() {
                 <div className="flex items-center justify-between">
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-3 group">
-                        <JellioLogo className="w-8 h-8 transition-transform group-hover:scale-110" />
+                        <JellioLogo className="w-8 h-8 transition-transform group-hover:scale-105" />
                         <LogoText />
                     </Link>
 
@@ -52,28 +73,28 @@ export function Navbar() {
                     <div className="hidden md:flex items-center gap-8">
                         <Link
                             to="/"
-                            className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                            className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
                         >
                             Trang chủ
                         </Link>
 
                         <div className="relative group">
-                            <button className="flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                            <button className="flex items-center gap-1 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors cursor-pointer">
                                 Công cụ{" "}
                                 <ChevronDown className="w-3 h-3 group-hover:rotate-180 transition-transform" />
                             </button>
                             <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
-                                <div className="w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl p-2 overflow-hidden">
+                                <div className="w-64 bg-bg-surface border border-border-app rounded-lg shadow-none p-1 overflow-hidden">
                                     {tools.map((tool) => (
                                         <Link
                                             key={tool.href}
                                             to={tool.href}
-                                            className="block px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                                            className="block px-4 py-3 rounded-md hover:bg-bg-app transition-colors group/item"
                                         >
-                                            <div className="text-sm font-bold text-slate-900 dark:text-white">
+                                            <div className="text-sm font-bold text-text-primary group-hover/item:text-accent">
                                                 {tool.name}
                                             </div>
-                                            <div className="text-xs text-slate-500 dark:text-slate-400">
+                                            <div className="text-xs text-text-secondary">
                                                 {tool.description}
                                             </div>
                                         </Link>
@@ -83,30 +104,55 @@ export function Navbar() {
                         </div>
 
                         <a
-                            href="https://github.com/jellioos"
+                            href="https://github.com/Nguyentudung/JellioOS"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-2"
+                            className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors flex items-center gap-2"
                         >
                             <Github className="w-4 h-4" /> GitHub
                         </a>
 
-                        <div className="h-4 w-px bg-slate-300 dark:bg-slate-700" />
+                        <div className="h-4 w-px bg-border-app" />
+
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={toggleTheme}
+                            className="text-text-secondary hover:text-text-primary"
+                        >
+                            {theme === "dark" ? (
+                                <Sun className="w-4 h-4" />
+                            ) : (
+                                <Moon className="w-4 h-4" />
+                            )}
+                        </Button>
 
                         <Button
                             size="sm"
                             variant="primary"
-                            className="rounded-full px-6"
+                            className="rounded-md px-6"
                         >
                             Bắt đầu ngay
                         </Button>
                     </div>
 
                     {/* Mobile Menu Button */}
-                    <div className="md:hidden">
+                    <div className="md:hidden flex items-center gap-2">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={toggleTheme}
+                            className="text-text-secondary hover:text-text-primary"
+                        >
+                            {theme === "dark" ? (
+                                <Sun className="w-4 h-4" />
+                            ) : (
+                                <Moon className="w-4 h-4" />
+                            )}
+                        </Button>
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                            className="p-2 rounded-md text-text-secondary hover:bg-bg-surface hover:text-text-primary transition-colors"
                         >
                             {isOpen ? (
                                 <X className="w-6 h-6" />
@@ -125,18 +171,18 @@ export function Navbar() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-hidden"
+                        className="md:hidden border-t border-border-app bg-bg-app overflow-hidden"
                     >
                         <div className="px-4 pt-4 pb-8 space-y-4">
                             <Link
                                 to="/"
                                 onClick={() => setIsOpen(false)}
-                                className="block text-base font-medium text-slate-900 dark:text-white"
+                                className="block text-base font-medium text-text-primary"
                             >
                                 Trang chủ
                             </Link>
                             <div className="space-y-2">
-                                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                                <div className="text-xs font-bold text-text-secondary uppercase tracking-wider">
                                     Công cụ
                                 </div>
                                 {tools.map((tool) => (
@@ -144,15 +190,15 @@ export function Navbar() {
                                         key={tool.href}
                                         to={tool.href}
                                         onClick={() => setIsOpen(false)}
-                                        className="block pl-4 text-sm text-slate-600 dark:text-slate-300 py-2 border-l border-slate-200 dark:border-slate-800"
+                                        className="block pl-4 text-sm text-text-secondary hover:text-text-primary py-2 border-l border-border-app"
                                     >
                                         {tool.name}
                                     </Link>
                                 ))}
                             </div>
                             <a
-                                href="https://github.com/jellioos"
-                                className="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300"
+                                href="https://github.com/Nguyentudung/JellioOS"
+                                className="flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-text-primary"
                             >
                                 <Github className="w-4 h-4" /> GitHub Repo
                             </a>

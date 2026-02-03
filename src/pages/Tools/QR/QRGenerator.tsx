@@ -28,33 +28,8 @@ const initialState: QRState = {
 export default function QRGenerator() {
     const [history, setHistory] = useState<QRState[]>([initialState]);
     const [index, setIndex] = useState(0);
-    const [theme, setTheme] = useState<"light" | "dark">("light");
     const qrRef = useRef<QRPreviewHandle>(null);
-
     const state = history[index];
-
-    // Theme Init - sync with main app or local check
-    useEffect(() => {
-        if (document.documentElement.classList.contains("dark")) {
-            setTheme("dark");
-        } else {
-            setTheme("light");
-        }
-    }, []);
-
-    const toggleTheme = () => {
-        const newTheme = theme === "light" ? "dark" : "light";
-        setTheme(newTheme);
-        localStorage.theme = newTheme;
-        // We rely on the global class management, but here we can force it if needed
-        // or better, let the Navbar/App handle global theme?
-        // For now, let's keep local toggle working for this specific tool view context
-        if (newTheme === "dark") {
-            document.documentElement.classList.add("dark");
-        } else {
-            document.documentElement.classList.remove("dark");
-        }
-    };
 
     const updateState = (updates: Partial<QRState>) => {
         const newState = { ...state, ...updates };
@@ -105,17 +80,15 @@ export default function QRGenerator() {
     }, [undo, redo]);
 
     return (
-        <div className="h-[calc(100vh-64px)] flex flex-col md:flex-row overflow-hidden bg-slate-50 dark:bg-dark-950 text-slate-800 dark:text-slate-100 font-sans mt-16">
+        <div className="h-screen flex flex-col md:flex-row overflow-hidden bg-bg-app text-text-primary font-sans">
             <Sidebar state={state} onChange={updateState} />
 
-            <main className="flex-1 bg-slate-100 dark:bg-black flex flex-col relative overflow-hidden bg-grid">
+            <main className="flex-1 bg-bg-app flex flex-col relative overflow-hidden bg-grid">
                 <Header
                     onUndo={undo}
                     onRedo={redo}
                     onRandomize={randomize}
                     onExport={(ext, size) => qrRef.current?.download(ext, size)}
-                    theme={theme}
-                    toggleTheme={toggleTheme}
                     canUndo={index > 0}
                     canRedo={index < history.length - 1}
                 />
