@@ -1,0 +1,99 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+    --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+    /* Primary Colors */
+    --color-primary: #0a0c10;
+    --color-secondary: #161b22;
+    --color-accent: #2f81f7;
+    --color-accent-hover: #58a6ff;
+
+    /* Text Colors */
+    --color-text-main: #f0f6fc;
+    --color-text-muted: #8b949e;
+
+    /* Utility Colors */
+    --color-dark-800: var(--color-secondary);
+    --color-dark-900: var(--color-primary);
+    --color-dark-950: #020617;
+
+    /* Animations */
+    --animate-pop: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --animate-fade-in-up: fadeInUp 0.4s ease-out;
+
+    @keyframes pop {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+:root {
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    font-weight: 400;
+
+    color-scheme: dark;
+    background-color: var(--color-primary);
+    color: var(--color-text-main);
+
+    /* Selection Color */
+    --color-selection: rgba(47, 129, 247, 0.3);
+}
+
+::selection {
+    background: var(--color-selection);
+    color: #fff;
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    @apply bg-primary text-text-main antialiased;
+}
+
+/* Custom Scrollbar specifically for dark theme dominance */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--color-primary);
+}
+::-webkit-scrollbar-thumb {
+    background: #30363d;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #424a53;
+}
+
+/* Subtle Grid Background for dashboard vibes */
+.bg-grid-premium {
+    background-size: 40px 40px;
+    background-image:
+        linear-gradient(to right, #161b22 1px, transparent 1px),
+        linear-gradient(to bottom, #161b22 1px, transparent 1px);
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+}
