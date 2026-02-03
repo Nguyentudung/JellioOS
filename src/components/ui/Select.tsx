@@ -67,7 +67,7 @@ export function Select({ value, onChange, options, className }: SelectProps) {
                             className={cn(
                                 "flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors text-sm font-medium",
                                 option.value === value
-                                    ? "bg-accent/10 text-accent"
+                                    ? "bg-primary/10 text-primary"
                                     : "text-text-secondary hover:text-text-primary hover:bg-bg-app",
                             )}
                             onClick={() => {

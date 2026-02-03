@@ -45,11 +45,61 @@ export function Navbar() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const toggleTheme = () => {
+    const toggleTheme = (e?: React.MouseEvent) => {
         const newTheme = theme === "light" ? "dark" : "light";
-        setTheme(newTheme);
-        localStorage.setItem("theme", newTheme);
-        document.documentElement.classList.toggle("dark", newTheme === "dark");
+
+        // Helper to update DOM
+        const updateDOM = () => {
+            setTheme(newTheme);
+            localStorage.setItem("theme", newTheme);
+            document.documentElement.classList.toggle(
+                "dark",
+                newTheme === "dark",
+            );
+        };
+
+        // Check if View Transitions API is supported
+        if (
+            !document.startViewTransition ||
+            !e ||
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ) {
+            updateDOM();
+            return;
+        }
+
+        const target = e.currentTarget as HTMLElement;
+        const rect = target.getBoundingClientRect();
+
+        // Center of the circle (click position or button center)
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+
+        // Calculate distance to the furthest corner to ensure full coverage
+        const right = window.innerWidth - x;
+        const bottom = window.innerHeight - y;
+        const radius = Math.hypot(Math.max(x, right), Math.max(y, bottom));
+
+        const transition = document.startViewTransition(() => {
+            updateDOM();
+        });
+
+        transition.ready.then(() => {
+            // Animate the circle spread
+            document.documentElement.animate(
+                {
+                    clipPath: [
+                        `circle(0px at ${x}px ${y}px)`,
+                        `circle(${radius}px at ${x}px ${y}px)`,
+                    ],
+                },
+                {
+                    duration: 500,
+                    easing: "ease-in-out",
+                    pseudoElement: "::view-transition-new(root)",
+                },
+            );
+        });
     };
 
     return (
@@ -91,7 +141,7 @@ export function Navbar() {
                                             to={tool.href}
                                             className="block px-4 py-3 rounded-md hover:bg-bg-app transition-colors group/item"
                                         >
-                                            <div className="text-sm font-bold text-text-primary group-hover/item:text-accent">
+                                            <div className="text-sm font-bold text-text-primary group-hover/item:text-primary">
                                                 {tool.name}
                                             </div>
                                             <div className="text-xs text-text-secondary">
@@ -118,13 +168,24 @@ export function Navbar() {
                             variant="ghost"
                             size="icon"
                             onClick={toggleTheme}
-                            className="text-text-secondary hover:text-text-primary"
+                            className="text-text-secondary hover:text-text-primary relative overflow-hidden"
+                            aria-label="Toggle Theme"
                         >
-                            {theme === "dark" ? (
-                                <Sun className="w-4 h-4" />
-                            ) : (
-                                <Moon className="w-4 h-4" />
-                            )}
+                            <AnimatePresence mode="wait" initial={false}>
+                                <motion.div
+                                    key={theme}
+                                    initial={{ y: -20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: 20, opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    {theme === "dark" ? (
+                                        <Sun className="w-4 h-4" />
+                                    ) : (
+                                        <Moon className="w-4 h-4" />
+                                    )}
+                                </motion.div>
+                            </AnimatePresence>
                         </Button>
 
                         <Button
@@ -142,13 +203,35 @@ export function Navbar() {
                             variant="ghost"
                             size="icon"
                             onClick={toggleTheme}
-                            className="text-text-secondary hover:text-text-primary"
+                            className="text-text-secondary hover:text-text-primary relative overflow-hidden"
                         >
-                            {theme === "dark" ? (
-                                <Sun className="w-4 h-4" />
-                            ) : (
-                                <Moon className="w-4 h-4" />
-                            )}
+                            <AnimatePresence mode="wait" initial={false}>
+                                <motion.div
+                                    key={theme}
+                                    initial={{
+                                        scale: 0.5,
+                                        rotate: 90,
+                                        opacity: 0,
+                                    }}
+                                    animate={{
+                                        scale: 1,
+                                        rotate: 0,
+                                        opacity: 1,
+                                    }}
+                                    exit={{
+                                        scale: 0.5,
+                                        rotate: 90,
+                                        opacity: 0,
+                                    }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    {theme === "dark" ? (
+                                        <Sun className="w-4 h-4" />
+                                    ) : (
+                                        <Moon className="w-4 h-4" />
+                                    )}
+                                </motion.div>
+                            </AnimatePresence>
                         </Button>
                         <button
                             onClick={() => setIsOpen(!isOpen)}

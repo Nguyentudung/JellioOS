@@ -12,10 +12,17 @@ export interface QRState {
     data: string;
     dots: QRDotsType;
     corners: QRCornersType;
-    isGradient: boolean;
-    color1: string;
-    color2: string;
-    bgColor: string;
+
+    // QR Colors (Dots)
+    qrColors: string[];
+    qrGradientType: "linear" | "radial";
+    qrRotation: number;
+
+    // Background Colors
+    bgColors: string[];
+    bgGradientType: "linear" | "radial";
+    bgRotation: number;
+
     logo: string | null;
     margin: number;
     logoMargin: number;

@@ -49,53 +49,53 @@ export function Header({
             <div className="flex items-center gap-2">
                 <Button
                     variant="outline"
-                    size="icon"
+                    className="h-10 w-10 p-0"
                     onClick={onUndo}
                     disabled={!canUndo}
-                    title="Undo"
+                    title="Hoàn tác"
                 >
                     <Undo className="w-4 h-4" />
                 </Button>
                 <Button
                     variant="outline"
-                    size="icon"
+                    className="h-10 w-10 p-0"
                     onClick={onRedo}
                     disabled={!canRedo}
-                    title="Redo"
+                    title="Làm lại"
                 >
                     <Redo className="w-4 h-4" />
                 </Button>
                 <div className="w-px h-6 bg-border-app mx-1"></div>
                 <Button
-                    className="bg-bg-surface border border-border-app text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20"
-                    size="sm"
+                    variant="secondary"
+                    className="h-10 px-5 gap-2 text-purple-600 dark:text-purple-400 font-bold"
                     onClick={onRandomize}
                 >
-                    <Shuffle className="w-4 h-4 mr-2" />
+                    <Shuffle className="w-4 h-4" />
                     Ngẫu nhiên
                 </Button>
             </div>
 
             <div className="flex items-center gap-3">
-                <Link to="/">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-text-secondary hover:text-text-primary gap-2"
-                    >
+                <Button
+                    variant="secondary"
+                    asChild
+                    className="h-10 w-32 font-bold"
+                >
+                    <Link to="/">
                         <ArrowLeft className="w-4 h-4" />
-                        <span className="hidden sm:inline">Thoát</span>
-                    </Button>
-                </Link>
+                        <span>Thoát</span>
+                    </Link>
+                </Button>
 
                 <div className="relative" ref={exportRef}>
                     <Button
                         variant="primary"
-                        size="md"
+                        className="h-10 w-32 font-bold"
                         onClick={() => setShowExport(!showExport)}
                     >
-                        <Download className="w-4 h-4 mr-2" />
-                        Xuất QR
+                        <Download className="w-4 h-4" />
+                        <span>Xuất QR</span>
                     </Button>
 
                     {showExport && (
@@ -106,7 +106,7 @@ export function Header({
                                         <span className="text-xs font-bold text-text-secondary uppercase">
                                             Kích thước
                                         </span>
-                                        <span className="text-xs font-mono font-bold text-accent">
+                                        <span className="text-xs font-mono font-bold text-primary">
                                             {exportSize}px
                                         </span>
                                     </div>
@@ -129,17 +129,17 @@ export function Header({
                                     <div className="grid grid-cols-2 gap-3">
                                         <button
                                             onClick={() => handleExport("png")}
-                                            className="flex flex-col items-center justify-center p-3 rounded-md border border-border-app bg-bg-app hover:border-accent hover:bg-accent/5 transition-all group"
+                                            className="flex flex-col items-center justify-center p-3 rounded-md border border-border-app bg-bg-app hover:border-primary hover:bg-primary/5 transition-all group"
                                         >
-                                            <span className="text-xs font-black text-text-primary group-hover:text-accent">
+                                            <span className="text-xs font-black text-text-primary group-hover:text-primary">
                                                 PNG
                                             </span>
                                         </button>
                                         <button
                                             onClick={() => handleExport("svg")}
-                                            className="flex flex-col items-center justify-center p-3 rounded-md border border-border-app bg-bg-app hover:border-accent hover:bg-accent/5 transition-all group"
+                                            className="flex flex-col items-center justify-center p-3 rounded-md border border-border-app bg-bg-app hover:border-primary hover:bg-primary/5 transition-all group"
                                         >
-                                            <span className="text-xs font-black text-text-primary group-hover:text-accent">
+                                            <span className="text-xs font-black text-text-primary group-hover:text-primary">
                                                 SVG
                                             </span>
                                         </button>

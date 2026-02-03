@@ -4,30 +4,19 @@
  */
 
 import { Helmet } from "react-helmet-async";
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { QrCode, ArrowRight, Zap, Code2, Box, Cpu } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import { JellioLogo } from "../../components/ui/Logo";
 import { Navbar } from "../../components/navigation/Navbar";
 
-export default function HomePage() {
-    const container: Variants = {
-        hidden: { opacity: 0 },
-        show: {
-            opacity: 1,
-            transition: { staggerChildren: 0.1 },
-        },
-    };
+import { fadeInUp, staggerContainer } from "../../lib/motion";
 
-    const item: Variants = {
-        hidden: { opacity: 0, y: 30 },
-        show: {
-            opacity: 1,
-            y: 0,
-            transition: { type: "spring", stiffness: 50 },
-        },
-    };
+export default function HomePage() {
+    // Reuse variants from library
+    const container = staggerContainer;
+    const item = fadeInUp;
 
     return (
         <>
@@ -101,20 +90,16 @@ export default function HomePage() {
                                     Trải nghiệm Ngay
                                 </Button>
                             </Link>
-                            <a
-                                href="https://github.com/Nguyentudung/JellioOS"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
+                            <Link to="https://github.com/nguyentudung">
                                 <Button
                                     variant="secondary"
-                                    size="lg"
-                                    className="w-full sm:w-48"
+                                    size="sm"
+                                    className="bg-bg-surface/50 backdrop-blur-sm border border-border-app hover:bg-bg-surface text-text-secondary"
                                 >
-                                    <Code2 className="w-5 h-5 mr-2" /> GitHub
-                                    Repo
+                                    <Code2 className="w-4 h-4 mr-2" />
+                                    Mã nguồn mở
                                 </Button>
-                            </a>
+                            </Link>
                         </motion.div>
                     </section>
 
@@ -154,14 +139,14 @@ export default function HomePage() {
                                 className="group flex flex-col h-full bg-bg-surface border border-border-app rounded-2xl p-6 hover:border-accent transition-all duration-300"
                             >
                                 <div className="flex justify-between items-start mb-6">
-                                    <div className="p-3 bg-bg-app rounded-xl border border-border-app group-hover:border-accent/30 transition-colors">
-                                        <QrCode className="w-8 h-8 text-accent" />
+                                    <div className="p-3 bg-bg-app rounded-xl border border-border-app group-hover:border-primary/30 transition-colors">
+                                        <QrCode className="w-8 h-8 text-primary" />
                                     </div>
-                                    <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent rounded-full border border-accent/20">
-                                        Available
+                                    <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary rounded-full border border-primary/20">
+                                        Sẵn sàng
                                     </span>
                                 </div>
-                                <h3 className="text-xl font-bold mb-2 text-text-primary group-hover:text-accent transition-colors">
+                                <h3 className="text-xl font-bold mb-2 text-text-primary group-hover:text-primary transition-colors">
                                     QR Studio
                                 </h3>
                                 <p className="text-text-secondary text-sm flex-1 mb-6">
@@ -172,7 +157,7 @@ export default function HomePage() {
                                 <Link to="/tools/qr" className="mt-auto">
                                     <Button
                                         variant="outline"
-                                        className="w-full group-hover:bg-accent group-hover:text-white group-hover:border-accent"
+                                        className="w-full group-hover:bg-primary group-hover:text-white group-hover:border-primary"
                                     >
                                         Mở Công cụ{" "}
                                         <ArrowRight className="w-4 h-4 ml-2" />
@@ -190,7 +175,7 @@ export default function HomePage() {
                                         <Box className="w-8 h-8 text-text-secondary" />
                                     </div>
                                     <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-bg-surface text-text-secondary rounded-full border border-border-app">
-                                        Coming Soon
+                                        Sắp ra mắt
                                     </span>
                                 </div>
                                 <h3 className="text-xl font-bold mb-2 text-text-secondary">
@@ -219,7 +204,7 @@ export default function HomePage() {
                                         <Cpu className="w-8 h-8 text-text-secondary" />
                                     </div>
                                     <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-bg-surface text-text-secondary rounded-full border border-border-app">
-                                        Concept
+                                        Ý tưởng
                                     </span>
                                 </div>
                                 <h3 className="text-xl font-bold mb-2 text-text-secondary">

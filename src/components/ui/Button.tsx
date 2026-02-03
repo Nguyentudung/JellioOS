@@ -1,100 +1,117 @@
-/*
- * Copyright (c) 2026 JellioOS. All rights reserved.
- * Licensed under the MIT License.
- */
-
 import * as React from "react";
-import { cn } from "../../lib/utils";
-import { motion } from "framer-motion";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+import { motion, type HTMLMotionProps } from "framer-motion";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: "primary" | "secondary" | "outline" | "ghost" | "danger" | "text";
-    size?: "sm" | "md" | "lg" | "icon";
+import { cn } from "../../lib/utils";
+import { tapScale } from "../../lib/motion";
+
+const buttonVariants = cva(
+    "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+    {
+        variants: {
+            variant: {
+                default:
+                    "bg-primary text-primary-foreground shadow-none hover:bg-primary/90",
+                destructive:
+                    "bg-destructive text-destructive-foreground shadow-none hover:bg-destructive/90",
+                outline:
+                    "border border-input bg-background shadow-none hover:bg-accent hover:text-accent-foreground hover:border-sidebar-primary",
+                secondary:
+                    "bg-secondary text-secondary-foreground shadow-none hover:bg-secondary/80",
+                ghost: "shadow-none hover:bg-accent hover:text-accent-foreground",
+                link: "text-primary underline-offset-4 shadow-none hover:underline",
+                primary:
+                    "bg-primary text-primary-foreground shadow-none hover:bg-primary/90",
+            },
+            size: {
+                default: "h-9 px-4 py-2",
+                sm: "h-8 rounded-md px-3 text-xs",
+                lg: "h-10 rounded-md px-8",
+                icon: "h-9 w-9",
+                md: "h-9 px-4 py-2",
+            },
+        },
+        defaultVariants: {
+            variant: "default",
+            size: "default",
+        },
+    },
+);
+
+export interface ButtonProps
+    extends
+        React.ButtonHTMLAttributes<HTMLButtonElement>,
+        VariantProps<typeof buttonVariants> {
+    asChild?: boolean;
     isLoading?: boolean;
 }
 
-type MotionButtonProps = React.ComponentProps<typeof motion.button> &
-    Omit<ButtonProps, "style">;
+// Type intersection for Motion compatibility
+type MotionButtonProps = ButtonProps & HTMLMotionProps<"button">;
 
-export const Button = React.forwardRef<HTMLButtonElement, MotionButtonProps>(
+const Button = React.forwardRef<HTMLButtonElement, MotionButtonProps>(
     (
         {
             className,
-            variant = "primary",
-            size = "md",
+            variant,
+            size,
+            asChild = false,
             isLoading,
             children,
             ...props
         },
         ref,
     ) => {
-        const variants = {
-            primary:
-                "bg-accent hover:bg-accent-hover text-white border border-transparent",
-            secondary:
-                "bg-bg-surface hover:bg-bg-app text-text-primary border border-border-app hover:border-accent transition-colors",
-            outline:
-                "bg-transparent border border-border-app text-text-secondary hover:text-text-primary hover:border-text-primary hover:bg-bg-surface",
-            ghost: "bg-transparent text-text-secondary hover:text-text-primary hover:bg-bg-surface",
-            danger: "bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20",
-            text: "p-0 text-accent hover:text-accent-hover underline-offset-4 hover:underline",
-        };
-
-        const sizes = {
-            sm: "h-8 px-3 text-xs rounded-md", // Changed to rounded-md
-            md: "h-10 px-5 text-sm rounded-md", // Changed to rounded-md
-            lg: "h-12 px-8 text-base rounded-lg",
-            icon: "h-10 w-10 flex items-center justify-center rounded-md p-0",
-        };
+        if (asChild) {
+            const Comp = Slot;
+            return (
+                <Comp
+                    className={cn(buttonVariants({ variant, size, className }))}
+                    ref={ref}
+                    disabled={isLoading || props.disabled}
+                    {...props}
+                >
+                    {children}
+                </Comp>
+            );
+        }
 
         return (
             <motion.button
+                className={cn(buttonVariants({ variant, size, className }))}
                 ref={ref}
-                whileTap={{ scale: 0.98 }}
-                className={cn(
-                    "relative inline-flex items-center justify-center font-semibold transition-colors duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-1 focus:ring-offset-bg-app disabled:opacity-50 disabled:pointer-events-none cursor-pointer tracking-wide",
-                    variants[variant],
-                    variant !== "text" ? sizes[size] : "",
-                    className,
-                    "shadow-none", // Enforce no shadow
-                )}
+                disabled={isLoading || props.disabled}
+                whileTap={!props.disabled && !isLoading ? tapScale : undefined}
                 {...props}
             >
                 {isLoading && (
-                    <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                        <svg
-                            className="animate-spin h-5 w-5 text-current"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                        >
-                            <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                            ></circle>
-                            <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                        </svg>
-                    </span>
+                    <svg
+                        className="mr-2 h-4 w-4 animate-spin"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                        ></circle>
+                        <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                    </svg>
                 )}
-                <span
-                    className={cn(
-                        "flex items-center gap-2",
-                        isLoading ? "opacity-0" : "opacity-100",
-                    )}
-                >
-                    {children}
-                </span>
+                {children}
             </motion.button>
         );
     },
 );
-
 Button.displayName = "Button";
+
+export { Button, buttonVariants };

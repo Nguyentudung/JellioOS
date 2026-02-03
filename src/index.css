@@ -1,10 +1,49 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
 
+@font-face {
+    font-family: "Noto Sans";
+    src: url("./assets/font/NotoSans-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Noto Sans";
+    src: url("./assets/font/NotoSans-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Noto Sans";
+    src: url("./assets/font/NotoSans-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Noto Sans";
+    src: url("./assets/font/NotoSans-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Noto Sans";
+    src: url("./assets/font/NotoSans-ExtraBold.ttf") format("truetype");
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
 @theme {
     /* Fonts */
-    --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "Noto Sans", ui-sans-serif, system-ui, sans-serif;
 
     /* Semantic Color Mapping */
     --color-background: hsl(var(--background));
@@ -71,11 +110,11 @@
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 0 0% 9%;
 
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
+    --accent: 210 40% 93%; /* Slightly darker for better visibility */
+    --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -145,4 +184,19 @@
 }
 ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--muted-foreground));
+}
+
+/* View Transitions API - Circle Spread Effect */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+    z-index: 2147483646;
+}
+
+::view-transition-old(root) {
+    z-index: 1;
 }

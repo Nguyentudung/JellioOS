@@ -36,11 +36,11 @@ export const QRPreview = forwardRef<QRPreviewHandle, QRPreviewProps>(
                 type: "svg",
                 data: state.data,
                 dotsOptions: {
-                    color: state.color1,
+                    color: state.qrColors[0],
                     type: state.dots as any,
                 },
                 backgroundOptions: {
-                    color: state.bgColor,
+                    color: state.bgColors[0],
                 },
                 imageOptions: {
                     crossOrigin: "anonymous",
@@ -58,34 +58,53 @@ export const QRPreview = forwardRef<QRPreviewHandle, QRPreviewProps>(
         useEffect(() => {
             if (!qrCode.current) return;
 
+            const getGradient = (
+                colors: string[],
+                type: "linear" | "radial",
+                rotation: number,
+            ) => {
+                if (colors.length <= 1) return undefined;
+                return {
+                    type: type,
+                    rotation: (rotation * Math.PI) / 180, // Convert deg to rad
+                    colorStops: colors.map((color, index) => ({
+                        offset: index / (colors.length - 1),
+                        color: color,
+                    })),
+                };
+            };
+
             const options: Options = {
                 data: state.data,
                 image: state.logo || undefined,
                 margin: state.margin,
                 dotsOptions: {
                     type: state.dots as any,
-                    color: state.color1,
-                    gradient: state.isGradient
-                        ? {
-                              type: "linear",
-                              rotation: 45,
-                              colorStops: [
-                                  { offset: 0, color: state.color1 },
-                                  { offset: 1, color: state.color2 },
-                              ],
-                          }
-                        : undefined,
+                    color: state.qrColors[0],
+                    gradient: getGradient(
+                        state.qrColors,
+                        state.qrGradientType,
+                        state.qrRotation,
+                    ),
                 },
                 cornersSquareOptions: {
                     type: state.corners as any,
-                    color: state.color1,
+                    color: state.qrColors[0], // Use first color for corners for now, or match gradient?
+                    // qr-code-styling corners can take gradient? Maybe. But let's stick to simple solid match for now to avoid complexity unless user asked (they didn't explicitly).
+                    // Actually, let's try to pass the same gradient if possible, but the types might be strict.
+                    // Usually corners match the main style.
                 },
                 cornersDotOptions: {
                     type: "dot",
-                    color: state.color1,
+                    color: state.qrColors[0],
                 },
                 backgroundOptions: {
-                    color: state.bgColor,
+                    color: state.bgColors[0],
+                    gradient: getGradient(
+                        state.bgColors,
+                        state.bgGradientType,
+                        state.bgRotation,
+                    ),
                 },
                 imageOptions: {
                     margin: state.logoMargin,
@@ -100,9 +119,6 @@ export const QRPreview = forwardRef<QRPreviewHandle, QRPreviewProps>(
                     ref={containerRef}
                     className="rounded-2xl overflow-hidden shadow-inner bg-white p-2"
                 />
-                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-5 py-1.5 rounded-full text-[10px] font-black shadow-lg whitespace-nowrap tracking-widest uppercase">
-                    jellioOS Preview
-                </div>
             </div>
         );
     },

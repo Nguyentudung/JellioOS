@@ -3,7 +3,7 @@ import type { QRState, QRDotsType, QRCornersType } from "../../types/qr";
 import { Label } from "../ui/Label";
 import { Select } from "../ui/Select";
 import { Slider } from "../ui/Slider";
-import { ColorPicker } from "../ui/ColorPicker";
+import { MultiColorPicker } from "../ui/MultiColorPicker";
 import { X } from "lucide-react";
 
 interface SidebarProps {
@@ -12,9 +12,9 @@ interface SidebarProps {
 }
 
 const dotsOptions: { value: QRDotsType; label: string; icon: string }[] = [
-    { value: "rounded", label: "Bo tròn (Rounded)", icon: "▢" },
-    { value: "dots", label: "Chấm bi (Dots)", icon: "●" },
-    { value: "square", label: "Vuông (Classic)", icon: "■" },
+    { value: "rounded", label: "Bo tròn", icon: "▢" },
+    { value: "dots", label: "Chấm bi", icon: "●" },
+    { value: "square", label: "Vuông", icon: "■" },
     { value: "extra-rounded", label: "Siêu bo góc", icon: "○" },
     { value: "classy", label: "Sang trọng", icon: "◆" },
 ];
@@ -40,7 +40,7 @@ export function Sidebar({ state, onChange }: SidebarProps) {
     return (
         <aside className="w-full md:w-[400px] bg-bg-surface border-r border-border-app flex flex-col z-30 shadow-none h-full shrink-0">
             {/* Minimal Header / Title for the Tool Panel */}
-            <div className="p-4 border-b border-border-app">
+            <div className="h-16 flex items-center px-6 border-b border-border-app shrink-0">
                 <h2 className="text-sm font-bold text-text-primary uppercase tracking-wider">
                     Cấu hình QR
                 </h2>
@@ -52,13 +52,12 @@ export function Sidebar({ state, onChange }: SidebarProps) {
                     <Label>Nội dung QR</Label>
                     <input
                         type="text"
-                        className="w-full bg-bg-app border border-border-app rounded-md px-3 py-2.5 text-sm font-medium text-text-primary focus:border-accent outline-none transition-all placeholder:text-text-secondary"
+                        className="w-full bg-bg-app border border-border-app rounded-md px-3 py-2.5 text-sm font-medium text-text-primary focus:border-primary outline-none transition-all placeholder:text-text-secondary"
                         placeholder="Nhập link..."
                         value={state.data}
                         onChange={(e) => onChange({ data: e.target.value })}
                     />
                 </div>
-
                 {/* Appearance */}
                 <div className="space-y-3">
                     <Label>Giao diện</Label>
@@ -85,9 +84,9 @@ export function Sidebar({ state, onChange }: SidebarProps) {
                         <div className="pt-2 border-t border-border-app">
                             <div className="flex justify-between items-center mb-1">
                                 <span className="text-[10px] font-bold text-text-secondary uppercase">
-                                    Khoảng cách lề (Margin)
+                                    Khoảng cách lề
                                 </span>
-                                <span className="text-[10px] font-mono text-accent font-bold">
+                                <span className="text-[10px] font-mono text-primary font-bold">
                                     {state.margin}px
                                 </span>
                             </div>
@@ -107,47 +106,39 @@ export function Sidebar({ state, onChange }: SidebarProps) {
                 </div>
 
                 {/* Colors */}
-                <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                        <Label className="mb-0">Màu sắc</Label>
-                        <div className="flex bg-bg-app border border-border-app rounded p-0.5">
-                            <button
-                                onClick={() => onChange({ isGradient: false })}
-                                className={`px-2 py-1 text-[10px] font-bold rounded transition-all ${!state.isGradient ? "bg-bg-surface border border-border-app text-text-primary" : "text-text-secondary"}`}
-                            >
-                                Đơn
-                            </button>
-                            <button
-                                onClick={() => onChange({ isGradient: true })}
-                                className={`px-2 py-1 text-[10px] font-bold rounded transition-all ${state.isGradient ? "bg-bg-surface border border-border-app text-text-primary" : "text-text-secondary"}`}
-                            >
-                                Grad
-                            </button>
-                        </div>
-                    </div>
+                <div className="space-y-6 pt-4 border-t border-border-app">
+                    <MultiColorPicker
+                        label="Màu sắc (QR)"
+                        colors={state.qrColors}
+                        onChangeColors={(colors) =>
+                            onChange({ qrColors: colors })
+                        }
+                        gradientType={state.qrGradientType}
+                        onChangeType={(type) =>
+                            onChange({ qrGradientType: type })
+                        }
+                        rotation={state.qrRotation}
+                        onChangeRotation={(rot) =>
+                            onChange({ qrRotation: rot })
+                        }
+                    />
 
-                    <div className="grid grid-cols-2 gap-3">
-                        <ColorPicker
-                            color={state.color1}
-                            onChange={(c) => onChange({ color1: c })}
-                        />
-                        <ColorPicker
-                            color={state.color2}
-                            onChange={(c) => onChange({ color2: c })}
-                            disabled={!state.isGradient}
-                        />
-                    </div>
-                    <div>
-                        <span className="text-[10px] text-text-secondary mb-1 block">
-                            Màu nền
-                        </span>
-                        <ColorPicker
-                            color={state.bgColor}
-                            onChange={(c) => onChange({ bgColor: c })}
-                        />
-                    </div>
+                    <MultiColorPicker
+                        label="Màu nền"
+                        colors={state.bgColors}
+                        onChangeColors={(colors) =>
+                            onChange({ bgColors: colors })
+                        }
+                        gradientType={state.bgGradientType}
+                        onChangeType={(type) =>
+                            onChange({ bgGradientType: type })
+                        }
+                        rotation={state.bgRotation}
+                        onChangeRotation={(rot) =>
+                            onChange({ bgRotation: rot })
+                        }
+                    />
                 </div>
-
                 {/* Logo */}
                 <div className="space-y-2">
                     <Label>Logo Trung Tâm</Label>
@@ -178,7 +169,7 @@ export function Sidebar({ state, onChange }: SidebarProps) {
                             <span className="text-[10px] font-bold text-text-secondary uppercase">
                                 Khoảng cách Logo
                             </span>
-                            <span className="text-[10px] font-mono text-accent font-bold">
+                            <span className="text-[10px] font-mono text-primary font-bold">
                                 {state.logoMargin}px
                             </span>
                         </div>

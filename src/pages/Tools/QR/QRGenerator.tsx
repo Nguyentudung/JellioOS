@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useDebounce } from "../../../hooks/useDebounce";
 import { Sidebar } from "../../../components/layout/Sidebar";
 import { Header } from "../../../components/layout/Header";
 import {
@@ -16,10 +17,12 @@ const initialState: QRState = {
     data: "https://jellioos.vercel.app/",
     dots: "rounded",
     corners: "extra-rounded",
-    isGradient: false,
-    color1: "#000000",
-    color2: "#000000",
-    bgColor: "#ffffff",
+    qrColors: ["#000000"],
+    qrGradientType: "linear",
+    qrRotation: 0,
+    bgColors: ["#ffffff"],
+    bgGradientType: "linear",
+    bgRotation: 0,
     logo: null,
     margin: 0,
     logoMargin: 0,
@@ -30,6 +33,7 @@ export default function QRGenerator() {
     const [index, setIndex] = useState(0);
     const qrRef = useRef<QRPreviewHandle>(null);
     const state = history[index];
+    const debouncedState = useDebounce(state, 150);
 
     const updateState = (updates: Partial<QRState>) => {
         const newState = { ...state, ...updates };
@@ -54,11 +58,19 @@ export default function QRGenerator() {
 
     const randomize = () => {
         const colors = ["#2563eb", "#db2777", "#059669", "#d97706", "#7c3aed"];
-        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        const randomColor1 = colors[Math.floor(Math.random() * colors.length)];
+        const randomColor2 = colors[Math.floor(Math.random() * colors.length)];
+
+        // Randomly choose 1 or 2 colors
+        const isGradient = Math.random() > 0.5;
+        const newColors = isGradient
+            ? [randomColor1, randomColor2]
+            : [randomColor1];
+
         updateState({
-            color1: randomColor,
-            isGradient: Math.random() > 0.5,
-            color2: colors[Math.floor(Math.random() * colors.length)],
+            qrColors: newColors,
+            qrRotation: Math.floor(Math.random() * 360),
+            bgColors: ["#ffffff"], // Keep bg simple for random or maybe random bg too? Let's keep simple.
         });
     };
 
@@ -95,7 +107,7 @@ export default function QRGenerator() {
 
                 <div className="flex-1 flex items-center justify-center p-10 relative overflow-hidden">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
-                    <QRPreview ref={qrRef} state={state} />
+                    <QRPreview ref={qrRef} state={debouncedState} />
                 </div>
             </main>
         </div>
