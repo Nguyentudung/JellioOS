@@ -13,7 +13,7 @@ import {
 import type { QRState } from "../../../types/qr";
 
 const initialState: QRState = {
-    data: "https://jellio.os",
+    data: "https://jellioos.vercel.app/",
     dots: "rounded",
     corners: "extra-rounded",
     isGradient: false,
