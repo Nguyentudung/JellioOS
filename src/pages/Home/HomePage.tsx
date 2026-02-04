@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { QrCode, ArrowRight, Zap, Code2, Box, Cpu } from "lucide-react";
 import { Button } from "../../components/ui/Button";
-import { JellioLogo } from "../../components/ui/Logo";
+import { JellioLogo, LogoText } from "../../components/ui/Logo";
 import { Navbar } from "../../components/navigation/Navbar";
 
 import { fadeInUp, staggerContainer } from "../../lib/motion";
@@ -64,7 +64,7 @@ export default function HomePage() {
                         >
                             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-1.1">
                                 Tinh tế trong từng <br />
-                                <span className="bg-clip-text text-transparent bg-linear-to-r from-accent to-purple-500">
+                                <span className="bg-clip-text text-transparent bg-linear-to-r from-primary to-purple-500">
                                     Điểm ảnh & Dòng code
                                 </span>
                             </h1>
@@ -146,8 +146,11 @@ export default function HomePage() {
                                         Sẵn sàng
                                     </span>
                                 </div>
-                                <h3 className="text-xl font-bold mb-2 text-text-primary group-hover:text-primary transition-colors">
+                                <h3 className="text-xl font-bold mb-2 text-text-primary group-hover:text-primary transition-colors flex items-center gap-2">
                                     QR Studio
+                                    <span className="text-[10px] font-medium text-text-secondary px-1.5 py-0.5 bg-bg-app border border-border-app rounded">
+                                        v0.0.1
+                                    </span>
                                 </h3>
                                 <p className="text-text-secondary text-sm flex-1 mb-6">
                                     Trình tạo mã QR cao cấp. Hỗ trợ tùy chỉnh
@@ -178,8 +181,11 @@ export default function HomePage() {
                                         Sắp ra mắt
                                     </span>
                                 </div>
-                                <h3 className="text-xl font-bold mb-2 text-text-secondary">
+                                <h3 className="text-xl font-bold mb-2 text-text-secondary flex items-center gap-2">
                                     Smart Converter
+                                    <span className="text-[10px] font-medium text-text-secondary/50 px-1.5 py-0.5 bg-bg-app/50 border border-border-app rounded">
+                                        v0.0.1
+                                    </span>
                                 </h3>
                                 <p className="text-text-secondary text-sm flex-1 mb-6">
                                     Chuyển đổi đa định dạng file (PDF, IMG,
@@ -207,8 +213,11 @@ export default function HomePage() {
                                         Ý tưởng
                                     </span>
                                 </div>
-                                <h3 className="text-xl font-bold mb-2 text-text-secondary">
+                                <h3 className="text-xl font-bold mb-2 text-text-secondary flex items-center gap-2">
                                     Dev Utils
+                                    <span className="text-[10px] font-medium text-text-secondary/50 px-1.5 py-0.5 bg-bg-app/50 border border-border-app rounded">
+                                        v0.0.1
+                                    </span>
                                 </h3>
                                 <p className="text-text-secondary text-sm flex-1 mb-6">
                                     Bộ công cụ tiện ích cho Developer: JSON
@@ -227,45 +236,67 @@ export default function HomePage() {
 
                     {/* Footer */}
                     <footer className="mt-32 pt-12 border-t border-border-app text-center md:text-left">
-                        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-                            <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 bg-text-primary text-bg-app rounded-lg flex items-center justify-center font-bold font-mono">
-                                    J
-                                </div>
-                                <div>
-                                    <p className="font-bold text-lg">
-                                        jellioOS{" "}
-                                        <span className="text-xs font-normal text-text-secondary px-2 py-0.5 bg-bg-surface border border-border-app rounded ml-2">
-                                            v5.3-alpha
-                                        </span>
-                                    </p>
-                                </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
+                            <div className="flex flex-col gap-4">
+                                <Link
+                                    to="/"
+                                    className="flex items-center gap-3 justify-center md:justify-start group"
+                                >
+                                    <JellioLogo className="w-8 h-8 transition-transform group-hover:scale-105" />
+                                    <LogoText />
+                                </Link>
+                                <p className="text-sm text-text-secondary max-w-sm">
+                                    Hệ sinh thái công cụ web tối giản, mã nguồn
+                                    mở, hiện đại và mạnh mẽ. Tôn trọng quyền
+                                    riêng tư và trải nghiệm người dùng.
+                                </p>
                             </div>
-                            <div className="flex gap-8 text-sm text-text-secondary">
+
+                            <div className="flex flex-col items-center md:items-start gap-4">
+                                <h4 className="text-xs font-bold uppercase tracking-widest text-text-secondary">
+                                    Sản phẩm
+                                </h4>
                                 <a
-                                    href="#"
-                                    className="hover:text-accent transition-colors"
+                                    href="https://jellioedu.vercel.app/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-text-primary hover:text-primary transition-colors w-fit"
                                 >
-                                    Về dự án
+                                    Hệ thống luyện đề thi
                                 </a>
-                                <a
-                                    href="#"
-                                    className="hover:text-accent transition-colors"
-                                >
-                                    Đóng góp
-                                </a>
-                                <a
-                                    href="#"
-                                    className="hover:text-accent transition-colors"
-                                >
-                                    Quyền riêng tư
-                                </a>
+                            </div>
+
+                            <div className="flex flex-col items-center md:items-start gap-4">
+                                <h4 className="text-xs font-bold uppercase tracking-widest text-text-secondary">
+                                    Duy trì dự án
+                                </h4>
+                                <p className="text-sm text-text-secondary max-w-xs leading-relaxed">
+                                    Bạn yêu thích JellioOS? Một{" "}
+                                    <Link
+                                        to="/donate"
+                                        className="text-primary hover:text-primary/80 hover:underline font-bold"
+                                    >
+                                        ly cà phê
+                                    </Link>{" "}
+                                    nhỏ sẽ giúp mình có thêm động lực duy trì và
+                                    phát triển dự án hoàn toàn miễn phí.
+                                </p>
                             </div>
                         </div>
-                        <div className="mt-8 pt-8 border-t border-border-app text-xs text-text-secondary">
+                        <div className="mt-12 pt-8 border-t border-border-app text-xs text-text-secondary flex flex-col md:flex-row justify-between items-center gap-4">
                             <p>
                                 © 2026 JellioOS Project. Mã nguồn mở theo giấy
                                 phép MIT.
+                            </p>
+                            <p className="flex items-center gap-1">
+                                Built with{" "}
+                                <span className="text-red-500">❤️</span> by{" "}
+                                <a
+                                    href="https://github.com/nguyentudung"
+                                    className="hover:text-primary underline underline-offset-4"
+                                >
+                                    @nguyentudung
+                                </a>
                             </p>
                         </div>
                     </footer>
