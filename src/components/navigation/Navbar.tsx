@@ -17,7 +17,11 @@ const tools = [
         href: "/tools/qr",
         description: "Tạo và tùy chỉnh mã QR",
     },
-    // Future tools can be added here
+    {
+        name: "Network Speedtest",
+        href: "/tools/speedtest",
+        description: "Kiểm tra tốc độ mạng thực tế",
+    },
 ];
 
 export function Navbar() {

@@ -10,7 +10,6 @@ interface SidebarProps {
     state: QRState;
     onChange: (updates: Partial<QRState>) => void;
 }
-
 const dotsOptions: { value: QRDotsType; label: string; icon: string }[] = [
     { value: "rounded", label: "Bo tròn", icon: "▢" },
     { value: "dots", label: "Chấm bi", icon: "●" },
@@ -105,7 +104,6 @@ export function Sidebar({ state, onChange }: SidebarProps) {
                     </div>
                 </div>
 
-                {/* Colors */}
                 <div className="space-y-6 pt-4 border-t border-border-app">
                     <MultiColorPicker
                         label="Màu sắc (QR)"
@@ -123,21 +121,23 @@ export function Sidebar({ state, onChange }: SidebarProps) {
                         }
                     />
 
-                    <MultiColorPicker
-                        label="Màu nền"
-                        colors={state.bgColors}
-                        onChangeColors={(colors) =>
-                            onChange({ bgColors: colors })
-                        }
-                        gradientType={state.bgGradientType}
-                        onChangeType={(type) =>
-                            onChange({ bgGradientType: type })
-                        }
-                        rotation={state.bgRotation}
-                        onChangeRotation={(rot) =>
-                            onChange({ bgRotation: rot })
-                        }
-                    />
+                    <div className="space-y-4">
+                        <MultiColorPicker
+                            label="Màu nền"
+                            colors={state.bgColors}
+                            onChangeColors={(colors) =>
+                                onChange({ bgColors: colors })
+                            }
+                            gradientType={state.bgGradientType}
+                            onChangeType={(type) =>
+                                onChange({ bgGradientType: type })
+                            }
+                            rotation={state.bgRotation}
+                            onChangeRotation={(rot) =>
+                                onChange({ bgRotation: rot })
+                            }
+                        />
+                    </div>
                 </div>
                 {/* Logo */}
                 <div className="space-y-2">

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Undo, Redo, Shuffle, Download, ArrowLeft } from "lucide-react";
+import { Undo, Redo, Shuffle, Download, ArrowLeft, Scan } from "lucide-react";
 import { Button } from "../ui/Button";
 import { Slider } from "../ui/Slider";
 
@@ -11,6 +11,8 @@ interface HeaderProps {
     onExport: (ext: "png" | "svg", size: number) => void;
     canUndo: boolean;
     canRedo: boolean;
+    bgCornerRadius: number;
+    onChangeCornerRadius: (value: number) => void;
 }
 
 export function Header({
@@ -20,10 +22,15 @@ export function Header({
     onExport,
     canUndo,
     canRedo,
+    bgCornerRadius,
+    onChangeCornerRadius,
 }: HeaderProps) {
     const [showExport, setShowExport] = React.useState(false);
     const [exportSize, setExportSize] = React.useState(1000);
     const exportRef = React.useRef<HTMLDivElement>(null);
+
+    const [showRadius, setShowRadius] = React.useState(false);
+    const radiusRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -32,6 +39,12 @@ export function Header({
                 !exportRef.current.contains(event.target as Node)
             ) {
                 setShowExport(false);
+            }
+            if (
+                radiusRef.current &&
+                !radiusRef.current.contains(event.target as Node)
+            ) {
+                setShowRadius(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -66,6 +79,60 @@ export function Header({
                     <Redo className="w-4 h-4" />
                 </Button>
                 <div className="w-px h-6 bg-border-app mx-1"></div>
+
+                <div className="relative" ref={radiusRef}>
+                    <Button
+                        variant="secondary"
+                        className={`h-10 w-10 p-0 ${showRadius ? "bg-primary/10 text-primary border-primary" : ""}`}
+                        onClick={() => setShowRadius(!showRadius)}
+                        title="Bo góc nền"
+                    >
+                        <Scan className="w-4 h-4" />
+                    </Button>
+                    {showRadius && (
+                        <div className="absolute top-[calc(100%+10px)] left-0 w-[200px] bg-bg-surface border border-border-app rounded-xl shadow-xl p-4 z-50 animate-fade-in-up">
+                            <div className="space-y-3">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-xs font-bold text-text-secondary uppercase">
+                                        Bo góc (%)
+                                    </span>
+                                </div>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        inputMode="numeric"
+                                        value={Math.round(
+                                            bgCornerRadius * 100,
+                                        ).toString()}
+                                        onChange={(e) => {
+                                            // Strip everything except numbers
+                                            const raw = e.target.value.replace(
+                                                /[^0-9]/g,
+                                                "",
+                                            );
+                                            // Handle empty string as 0, and corectly handle leading zeros
+                                            const val = Math.min(
+                                                50,
+                                                Math.max(
+                                                    0,
+                                                    parseInt(raw, 10) || 0,
+                                                ),
+                                            );
+                                            onChangeCornerRadius(val / 100);
+                                        }}
+                                        className="w-full bg-bg-app border border-border-app rounded-sm px-3 py-2 text-sm font-bold text-text-primary focus:border-primary outline-none transition-colors"
+                                        placeholder="0"
+                                        onFocus={(e) => e.target.select()}
+                                    />
+                                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-text-secondary pointer-events-none">
+                                        %
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
                 <Button
                     variant="secondary"
                     className="h-10 px-5 gap-2 text-purple-600 dark:text-purple-400 font-bold"

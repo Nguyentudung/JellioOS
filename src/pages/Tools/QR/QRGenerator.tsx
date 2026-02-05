@@ -23,6 +23,7 @@ const initialState: QRState = {
     bgColors: ["#ffffff"],
     bgGradientType: "linear",
     bgRotation: 0,
+    bgCornerRadius: 0,
     logo: null,
     margin: 0,
     logoMargin: 0,
@@ -33,19 +34,32 @@ export default function QRGenerator() {
     const [index, setIndex] = useState(0);
     const qrRef = useRef<QRPreviewHandle>(null);
     const state = history[index];
-    const debouncedState = useDebounce(state, 150);
+    const debouncedState = useDebounce(state, 50);
+
+    const lastUpdateRef = useRef<number>(0);
 
     const updateState = (updates: Partial<QRState>) => {
+        const now = Date.now();
         const newState = { ...state, ...updates };
-        const newHistory = history.slice(0, index + 1);
-        newHistory.push(newState);
 
-        if (newHistory.length > 50) {
-            newHistory.shift();
+        // If updates are rapid (dragging), replace the current state instead of pushing new history
+        // This prevents history spam and improves performance
+        if (now - lastUpdateRef.current < 500 && index === history.length - 1) {
+            const newHistory = [...history];
+            newHistory[index] = newState;
+            setHistory(newHistory);
+        } else {
+            const newHistory = history.slice(0, index + 1);
+            newHistory.push(newState);
+
+            if (newHistory.length > 50) {
+                newHistory.shift();
+            }
+
+            setHistory(newHistory);
+            setIndex(newHistory.length - 1);
         }
-
-        setHistory(newHistory);
-        setIndex(newHistory.length - 1);
+        lastUpdateRef.current = now;
     };
 
     const undo = useCallback(() => {
@@ -103,6 +117,10 @@ export default function QRGenerator() {
                     onExport={(ext, size) => qrRef.current?.download(ext, size)}
                     canUndo={index > 0}
                     canRedo={index < history.length - 1}
+                    bgCornerRadius={state.bgCornerRadius}
+                    onChangeCornerRadius={(val) =>
+                        updateState({ bgCornerRadius: val })
+                    }
                 />
 
                 <div className="flex-1 flex items-center justify-center p-10 relative overflow-hidden">

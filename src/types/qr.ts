@@ -22,6 +22,7 @@ export interface QRState {
     bgColors: string[];
     bgGradientType: "linear" | "radial";
     bgRotation: number;
+    bgCornerRadius: number;
 
     logo: string | null;
     margin: number;

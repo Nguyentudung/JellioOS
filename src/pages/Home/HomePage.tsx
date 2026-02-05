@@ -6,7 +6,7 @@
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { QrCode, ArrowRight, Zap, Code2, Box, Cpu } from "lucide-react";
+import { QrCode, ArrowRight, Zap, Code2, Box, Activity } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import { JellioLogo, LogoText } from "../../components/ui/Logo";
 import { Navbar } from "../../components/navigation/Navbar";
@@ -200,36 +200,39 @@ export default function HomePage() {
                                 </Button>
                             </motion.div>
 
-                            {/* Upcoming Tool 2 */}
+                            {/* Network Speedtest Tool */}
                             <motion.div
                                 variants={item}
-                                className="opacity-60 flex flex-col h-full bg-bg-surface/30 border border-border-app border-dashed rounded-2xl p-6"
+                                className="group flex flex-col h-full bg-bg-surface border border-border-app rounded-2xl p-6 hover:border-accent transition-all duration-300"
                             >
                                 <div className="flex justify-between items-start mb-6">
-                                    <div className="p-3 bg-bg-app/50 rounded-xl border border-border-app">
-                                        <Cpu className="w-8 h-8 text-text-secondary" />
+                                    <div className="p-3 bg-bg-app rounded-xl border border-border-app group-hover:border-cyan-500/30 transition-colors">
+                                        <Activity className="w-8 h-8 text-cyan-500" />
                                     </div>
-                                    <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-bg-surface text-text-secondary rounded-full border border-border-app">
-                                        Ý tưởng
+                                    <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-cyan-500/10 text-cyan-500 rounded-full border border-cyan-500/20">
+                                        Sẵn sàng
                                     </span>
                                 </div>
-                                <h3 className="text-xl font-bold mb-2 text-text-secondary flex items-center gap-2">
-                                    Dev Utils
-                                    <span className="text-[10px] font-medium text-text-secondary/50 px-1.5 py-0.5 bg-bg-app/50 border border-border-app rounded">
-                                        v0.0.1
+                                <h3 className="text-xl font-bold mb-2 text-text-primary group-hover:text-cyan-500 transition-colors flex items-center gap-2">
+                                    Speedtest
+                                    <span className="text-[10px] font-medium text-text-secondary px-1.5 py-0.5 bg-bg-app border border-border-app rounded">
+                                        v1.0.0
                                     </span>
                                 </h3>
                                 <p className="text-text-secondary text-sm flex-1 mb-6">
-                                    Bộ công cụ tiện ích cho Developer: JSON
-                                    Formatter, Base64 encoder, RegEx tester.
+                                    Kiểm tra tốc độ internet (Download, Upload,
+                                    Ping) thời gian thực với độ chính xác cao và
+                                    biểu đồ trực quan.
                                 </p>
-                                <Button
-                                    disabled
-                                    variant="ghost"
-                                    className="w-full border border-border-app"
-                                >
-                                    Đang phát triển...
-                                </Button>
+                                <Link to="/tools/speedtest" className="mt-auto">
+                                    <Button
+                                        variant="outline"
+                                        className="w-full group-hover:bg-cyan-500 group-hover:text-white group-hover:border-cyan-500"
+                                    >
+                                        Mở Công cụ{" "}
+                                        <ArrowRight className="w-4 h-4 ml-2" />
+                                    </Button>
+                                </Link>
                             </motion.div>
                         </motion.div>
                     </section>

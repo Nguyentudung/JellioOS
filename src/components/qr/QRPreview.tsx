@@ -1,4 +1,11 @@
-import { useEffect, useRef, useImperativeHandle, forwardRef } from "react";
+import {
+    useEffect,
+    useRef,
+    useImperativeHandle,
+    forwardRef,
+    memo,
+    useState,
+} from "react";
 import QRCodeStyling, { type Options } from "qr-code-styling";
 import type { QRState } from "../../types/qr";
 
@@ -13,41 +20,90 @@ export interface QRPreviewHandle {
     ) => void;
 }
 
-export const QRPreview = forwardRef<QRPreviewHandle, QRPreviewProps>(
-    ({ state }, ref) => {
+export const QRPreview = memo(
+    forwardRef<QRPreviewHandle, QRPreviewProps>(({ state }, ref) => {
         const containerRef = useRef<HTMLDivElement>(null);
         const qrCode = useRef<QRCodeStyling | null>(null);
+        const [isGenerating, setIsGenerating] = useState(false);
+        const [isUpdating, setIsUpdating] = useState(false);
+
+        const getGradient = (
+            colors: string[],
+            type: "linear" | "radial",
+            rotation: number,
+        ) => {
+            if (colors.length <= 1) return undefined;
+            return {
+                type: type,
+                rotation: (rotation * Math.PI) / 180,
+                colorStops: colors.map((color, index) => ({
+                    offset: index / (colors.length - 1),
+                    color: color,
+                })),
+            };
+        };
+
+        const getOptions = (
+            currentState: QRState,
+            size: number = 300,
+        ): Options => ({
+            width: size,
+            height: size,
+            type: "svg",
+            data: currentState.data,
+            image: currentState.logo || undefined,
+            margin: currentState.margin,
+            dotsOptions: {
+                type: currentState.dots as any,
+                color: currentState.qrColors[0],
+                gradient: getGradient(
+                    currentState.qrColors,
+                    currentState.qrGradientType,
+                    currentState.qrRotation,
+                ),
+            },
+            cornersSquareOptions: {
+                type: currentState.corners as any,
+                color: currentState.qrColors[0],
+            },
+            cornersDotOptions: {
+                type: "dot",
+                color: currentState.qrColors[0],
+            },
+            backgroundOptions: {
+                color: currentState.bgColors[0],
+                gradient: getGradient(
+                    currentState.bgColors,
+                    currentState.bgGradientType,
+                    currentState.bgRotation,
+                ),
+                round: currentState.bgCornerRadius,
+            },
+            imageOptions: {
+                crossOrigin: "anonymous",
+                margin: currentState.logoMargin,
+            },
+        });
 
         useImperativeHandle(ref, () => ({
-            download: (extension, size) => {
-                if (!qrCode.current) return;
-                qrCode.current.update({ width: size, height: size });
-                qrCode.current.download({ name: "qr-jellio-os", extension });
-                // Revert size
-                qrCode.current.update({ width: 300, height: 300 });
+            download: async (extension, size) => {
+                setIsGenerating(true);
+                try {
+                    const exportOptions = getOptions(state, size);
+                    const tempQr = new QRCodeStyling(exportOptions);
+                    await new Promise((resolve) => setTimeout(resolve, 50));
+                    await tempQr.download({
+                        name: "qr-jellio-os",
+                        extension,
+                    });
+                } finally {
+                    setIsGenerating(false);
+                }
             },
         }));
 
         useEffect(() => {
-            // Initialize
-            const qr = new QRCodeStyling({
-                width: 300,
-                height: 300,
-                type: "svg",
-                data: state.data,
-                dotsOptions: {
-                    color: state.qrColors[0],
-                    type: state.dots as any,
-                },
-                backgroundOptions: {
-                    color: state.bgColors[0],
-                },
-                imageOptions: {
-                    crossOrigin: "anonymous",
-                    margin: state.logoMargin,
-                },
-            });
-
+            const qr = new QRCodeStyling(getOptions(state));
             if (containerRef.current) {
                 containerRef.current.innerHTML = "";
                 qr.append(containerRef.current);
@@ -58,70 +114,31 @@ export const QRPreview = forwardRef<QRPreviewHandle, QRPreviewProps>(
         useEffect(() => {
             if (!qrCode.current) return;
 
-            const getGradient = (
-                colors: string[],
-                type: "linear" | "radial",
-                rotation: number,
-            ) => {
-                if (colors.length <= 1) return undefined;
-                return {
-                    type: type,
-                    rotation: (rotation * Math.PI) / 180, // Convert deg to rad
-                    colorStops: colors.map((color, index) => ({
-                        offset: index / (colors.length - 1),
-                        color: color,
-                    })),
-                };
-            };
+            // Hiệu ứng loading khi sửa
+            setIsUpdating(true);
+            const timer = setTimeout(() => {
+                qrCode.current?.update(getOptions(state));
+                setIsUpdating(false);
+            }, 50); // Delay nhẹ để thấy hiệu ứng kính mờ
 
-            const options: Options = {
-                data: state.data,
-                image: state.logo || undefined,
-                margin: state.margin,
-                dotsOptions: {
-                    type: state.dots as any,
-                    color: state.qrColors[0],
-                    gradient: getGradient(
-                        state.qrColors,
-                        state.qrGradientType,
-                        state.qrRotation,
-                    ),
-                },
-                cornersSquareOptions: {
-                    type: state.corners as any,
-                    color: state.qrColors[0], // Use first color for corners for now, or match gradient?
-                    // qr-code-styling corners can take gradient? Maybe. But let's stick to simple solid match for now to avoid complexity unless user asked (they didn't explicitly).
-                    // Actually, let's try to pass the same gradient if possible, but the types might be strict.
-                    // Usually corners match the main style.
-                },
-                cornersDotOptions: {
-                    type: "dot",
-                    color: state.qrColors[0],
-                },
-                backgroundOptions: {
-                    color: state.bgColors[0],
-                    gradient: getGradient(
-                        state.bgColors,
-                        state.bgGradientType,
-                        state.bgRotation,
-                    ),
-                },
-                imageOptions: {
-                    margin: state.logoMargin,
-                },
-            };
-            qrCode.current.update(options);
+            return () => clearTimeout(timer);
         }, [state]);
 
+        const isLoading = isGenerating || isUpdating;
+
         return (
-            <div className="relative bg-white dark:bg-slate-900 p-8 rounded-[3rem] shadow-2xl border border-white/50 dark:border-slate-700 animate-pop transition-all duration-300">
+            <div className="relative bg-white dark:bg-slate-900 p-8 rounded-[3rem] shadow-2xl border border-white/50 dark:border-slate-700 animate-pop transition-all duration-300 overflow-hidden">
                 <div
                     ref={containerRef}
-                    className="rounded-2xl overflow-hidden shadow-inner bg-white p-2"
+                    className="p-0 rounded-none overflow-visible transition-all duration-300"
                 />
+
+                {isLoading && (
+                    <div className="absolute inset-0 bg-white/20 dark:bg-black/20 backdrop-blur-sm z-50 animate-in fade-in duration-200" />
+                )}
             </div>
         );
-    },
+    }),
 );
 
 QRPreview.displayName = "QRPreview";
