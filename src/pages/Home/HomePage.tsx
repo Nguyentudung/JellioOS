@@ -6,7 +6,14 @@
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { QrCode, ArrowRight, Zap, Code2, Box, Activity } from "lucide-react";
+import {
+    QrCode,
+    ArrowRight,
+    Zap,
+    Code2,
+    FileText,
+    Activity,
+} from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import { JellioLogo, LogoText } from "../../components/ui/Logo";
 import { Navbar } from "../../components/navigation/Navbar";
@@ -168,36 +175,39 @@ export default function HomePage() {
                                 </Link>
                             </motion.div>
 
-                            {/* Upcoming Tool 1 */}
+                            {/* Markdown Viewer Tool */}
                             <motion.div
                                 variants={item}
-                                className="opacity-60 flex flex-col h-full bg-bg-surface/30 border border-border-app border-dashed rounded-2xl p-6"
+                                className="group flex flex-col h-full bg-bg-surface border border-border-app rounded-2xl p-6 hover:border-accent transition-all duration-300"
                             >
                                 <div className="flex justify-between items-start mb-6">
-                                    <div className="p-3 bg-bg-app/50 rounded-xl border border-border-app">
-                                        <Box className="w-8 h-8 text-text-secondary" />
+                                    <div className="p-3 bg-bg-app rounded-xl border border-border-app group-hover:border-primary/30 transition-colors">
+                                        <FileText className="w-8 h-8 text-primary" />
                                     </div>
-                                    <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-bg-surface text-text-secondary rounded-full border border-border-app">
-                                        Sắp ra mắt
+                                    <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary rounded-full border border-primary/20">
+                                        Sẵn sàng
                                     </span>
                                 </div>
-                                <h3 className="text-xl font-bold mb-2 text-text-secondary flex items-center gap-2">
-                                    Smart Converter
-                                    <span className="text-[10px] font-medium text-text-secondary/50 px-1.5 py-0.5 bg-bg-app/50 border border-border-app rounded">
-                                        v0.0.1
+                                <h3 className="text-xl font-bold mb-2 text-text-primary group-hover:text-primary transition-colors flex items-center gap-2">
+                                    Markdown Viewer
+                                    <span className="text-[10px] font-medium text-text-secondary px-1.5 py-0.5 bg-bg-app border border-border-app rounded">
+                                        v1.0.0
                                     </span>
                                 </h3>
                                 <p className="text-text-secondary text-sm flex-1 mb-6">
-                                    Chuyển đổi đa định dạng file (PDF, IMG,
-                                    JSON) nhanh chóng ngay trên trình duyệt.
+                                    Trình xem Markdown chuyên nghiệp. Hỗ trợ ToC
+                                    tự động, syntax highlighting và giao diện
+                                    documentation chuẩn mực.
                                 </p>
-                                <Button
-                                    disabled
-                                    variant="ghost"
-                                    className="w-full border border-border-app"
-                                >
-                                    Đang phát triển...
-                                </Button>
+                                <Link to="/tools/markdown" className="mt-auto">
+                                    <Button
+                                        variant="outline"
+                                        className="w-full group-hover:bg-primary group-hover:text-white group-hover:border-primary"
+                                    >
+                                        Mở Công cụ{" "}
+                                        <ArrowRight className="w-4 h-4 ml-2" />
+                                    </Button>
+                                </Link>
                             </motion.div>
 
                             {/* Network Speedtest Tool */}
